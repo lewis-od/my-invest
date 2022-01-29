@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using FluentAssertions;
 using Moq;
 using MyInvest.Domain.Account;
@@ -13,6 +14,7 @@ public class AccountOpeningServiceTests
     private readonly ClientId _clientId = ClientId.From(Guid.NewGuid());
     private readonly AccountId _accountId = AccountId.From(Guid.NewGuid());
     private readonly Mock<IAccountRepository> _accountRepository = new();
+    private readonly Mock<IClientRepository> _clientRepository = new();
 
     private readonly AccountOpeningService _openingService;
 
@@ -21,14 +23,14 @@ public class AccountOpeningServiceTests
         var accountIdGenerator = new FixedIdGenerator<AccountId>(_accountId);
         var accountFactory = new AccountFactory(accountIdGenerator);
 
-        _openingService = new AccountOpeningService(accountFactory, _accountRepository.Object);
+        _openingService = new AccountOpeningService(accountFactory, _accountRepository.Object, _clientRepository.Object);
     }
 
     [Test]
     public void CreatesNewInvestmentAccountForClient()
     {
-        var sipp = new InvestmentAccount(AccountId.From(Guid.NewGuid()), _clientId, AccountType.SIPP, AccountStatus.Open, 100.0m);
-        _accountRepository.Setup(repo => repo.FindByClientId(_clientId)).Returns(new[] {sipp});
+        GivenClientExists();
+        GivenClientHasSipp();
 
         var openedAccount = _openingService.OpenAccount(_clientId, AccountType.GIA);
 
@@ -40,10 +42,29 @@ public class AccountOpeningServiceTests
     [Test]
     public void ThrowsExceptionIfClientAlreadyHasAccountOfSameType()
     {
-        var accountType = AccountType.SIPP;
-        var sipp = new InvestmentAccount(AccountId.From(Guid.NewGuid()), _clientId, accountType, AccountStatus.Open, 100.0m);
-        _accountRepository.Setup(repo => repo.FindByClientId(_clientId)).Returns(new[] {sipp});
+        GivenClientExists();
+        GivenClientHasSipp();
 
-        Assert.Throws<ClientAlreadyOwnsAccountException>(() => _openingService.OpenAccount(_clientId, accountType));
+        Assert.Throws<ClientAlreadyOwnsAccountException>(() => _openingService.OpenAccount(_clientId, AccountType.SIPP));
+    }
+
+    private void GivenClientExists()
+    {
+        var client = new MyInvest.Domain.Client.Client(_clientId, "username", Enumerable.Empty<InvestmentAccount>());
+        _clientRepository.Setup(repo => repo.GetById(_clientId)).Returns(client);
+    }
+
+    private void GivenClientHasSipp()
+    {
+        var sipp = new InvestmentAccount(AccountId.From(Guid.NewGuid()), _clientId, AccountType.SIPP, AccountStatus.Open, 100.0m);
+        _accountRepository.Setup(repo => repo.FindByClientId(_clientId)).Returns(new[] {sipp});
+    }
+
+    [Test]
+    public void ThrowsExceptionIfClientDoesntExist()
+    {
+        _clientRepository.Setup(repo => repo.GetById(_clientId)).Returns((MyInvest.Domain.Client.Client?) null);
+
+        Assert.Throws<ClientNotFoundException>(() => _openingService.OpenAccount(_clientId, AccountType.GIA));
     }
 }
