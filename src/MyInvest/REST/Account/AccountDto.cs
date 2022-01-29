@@ -8,9 +8,9 @@ public class AccountDto
     [Required]
     public Guid AccountId { get; set; }
     [Required]
-    public string AccountType { get; set; } = "";
+    public AccountTypeDto AccountType { get; set; } = AccountTypeDto.GIA;
     [Required]
-    public string Status { get; set; } = "";
+    public AccountStatusDto Status { get; set; } = AccountStatusDto.PreOpen;
     [Required]
     public decimal Balance { get; set; } = 0.0m;
     public SavingsDto? Savings { get; set; }

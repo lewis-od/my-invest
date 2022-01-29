@@ -1,9 +1,8 @@
 using System;
+using FluentAssertions;
 using MyInvest.Domain.Account;
-using MyInvest.Domain.Id;
 using MyInvest.REST;
 using MyInvest.REST.Account;
-using FluentAssertions;
 using NUnit.Framework;
 
 namespace MyInvest.UnitTests.REST;
@@ -29,7 +28,7 @@ public class AccountMapperTests
         var actualDto = _mapper.MapToDto(investmentAccount);
 
         var expectedDto = new AccountDto
-            {AccountId = accountId, AccountType = "GIA", Status = "OPEN", Balance = balance};
+            {AccountId = accountId, AccountType = AccountTypeDto.GIA, Status = AccountStatusDto.Open, Balance = balance};
         actualDto.Should().BeEquivalentTo(expectedDto);
     }
 
@@ -49,8 +48,8 @@ public class AccountMapperTests
         var expectedDto = new AccountDto
         {
             AccountId = savingsAccount.AccountId,
-            AccountType = "ISA",
-            Status = "OPEN",
+            AccountType = AccountTypeDto.ISA,
+            Status = AccountStatusDto.Open,
             Balance = balance,
             Savings = new SavingsDto {Allowance = savingsAllowance, Contributions = savingsContributions}
         };
