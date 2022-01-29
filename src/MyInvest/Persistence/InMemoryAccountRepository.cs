@@ -1,4 +1,5 @@
 using MyInvest.Domain.Account;
+using MyInvest.Domain.Client;
 
 namespace MyInvest.Persistence;
 
@@ -33,4 +34,18 @@ public class InMemoryAccountRepository : IAccountRepository
 
     public InvestmentAccount? GetById(AccountId accountId) => 
         _accounts.FirstOrDefault(account => account.AccountId.Equals(accountId));
+
+    public IEnumerable<InvestmentAccount> FindByClientId(ClientId clientId) => _accounts.FindAll(account => account.ClientId == clientId);
+
+    public void Create(InvestmentAccount newAccount)
+    {
+        var accountAlreadyExists = _accounts
+            .Select(account => account.AccountId)
+            .Contains(newAccount.AccountId);
+        if (accountAlreadyExists)
+        {
+            throw new AccountAlreadyExistsException("An account with ID " + newAccount.AccountId.Value + " already exists");
+        }
+        _accounts.Add(newAccount);
+    }
 }
