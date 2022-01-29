@@ -29,7 +29,7 @@ public class AccountMapperTests
         var actualDto = _mapper.MapToDto(investmentAccount);
 
         var expectedDto = new AccountDto
-            {AccountId = accountId, AccountType = "GIA", Balance = balance};
+            {AccountId = accountId, AccountType = "GIA", Status = "OPEN", Balance = balance};
         actualDto.Should().BeEquivalentTo(expectedDto);
     }
 
@@ -50,6 +50,7 @@ public class AccountMapperTests
         {
             AccountId = savingsAccount.AccountId,
             AccountType = "ISA",
+            Status = "OPEN",
             Balance = balance,
             Savings = new SavingsDto {Allowance = savingsAllowance, Contributions = savingsContributions}
         };
