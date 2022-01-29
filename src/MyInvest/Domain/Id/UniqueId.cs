@@ -1,0 +1,36 @@
+namespace MyInvest.Domain.Id;
+
+public abstract class UniqueId
+{
+    public Guid Value { get; }
+
+    public UniqueId(Guid value)
+    {
+        Value = value;
+    }
+
+    protected UniqueId(string value)
+    {
+        Value = Guid.Parse(value);
+    }
+
+    protected bool Equals(UniqueId other)
+    {
+        return Value.Equals(other.Value);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+        return Equals((UniqueId) obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return Value.GetHashCode();
+    }
+    
+    public static implicit operator Guid(UniqueId id) => id.Value;
+}
