@@ -30,7 +30,7 @@ public class AccountOpeningService
 
         if (ClientOwnsAccountOfType(clientId, accountType))
         {
-            throw new ClientAlreadyOwnsAccountException();
+            throw new ClientAlreadyOwnsAccountException("Client " + clientId.Value + " already has an account of type " + accountType);
         }
     }
 

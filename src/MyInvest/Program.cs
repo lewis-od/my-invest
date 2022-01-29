@@ -30,6 +30,7 @@ builder.Services.AddSingleton<AccountMapper>();
 builder.Services.AddSingleton<IUniqueIdGenerator<AccountId>, AccountIdGenerator>();
 builder.Services.AddSingleton<AccountFactory>();
 builder.Services.AddSingleton<IAccountRepository, InMemoryAccountRepository>();
+builder.Services.AddSingleton<AccountOpeningService>();
 
 builder.Services.AddSingleton<ClientMapper>();
 builder.Services.AddSingleton<IUniqueIdGenerator<ClientId>, ClientIdGenerator>();
