@@ -11,9 +11,10 @@ public class SavingsAccount : InvestmentAccount
         AccountId accountId,
         Guid clientId,
         AccountType accountType,
+        AccountStatus accountStatus,
         decimal balance,
         decimal savingsAllowance
-    ) : base(accountId, clientId, accountType, balance)
+    ) : base(accountId, clientId, accountType, accountStatus, balance)
     {
         if (accountType != AccountType.ISA && accountType != AccountType.JISA)
         {
@@ -28,10 +29,11 @@ public class SavingsAccount : InvestmentAccount
         AccountId accountId,
         Guid clientId,
         AccountType accountType,
+        AccountStatus accountStatus,
         decimal balance,
         decimal savingsAllowance,
         decimal savingsContributions
-    ) : this(accountId, clientId, accountType, balance, savingsAllowance)
+    ) : this(accountId, clientId, accountType, accountStatus, balance, savingsAllowance)
     {
         SavingsContributions = savingsContributions;
     }

@@ -13,6 +13,7 @@ public class AccountFactoryTests
     private const decimal Balance = 12.34m;
     private readonly AccountId _accountId = AccountId.From(Guid.NewGuid());
     private readonly Guid _clientId = Guid.NewGuid();
+    private readonly AccountStatus _accountStatus = AccountStatus.Open;
 
     private readonly AccountFactory _accountFactory;
 
@@ -32,9 +33,9 @@ public class AccountFactoryTests
     [TestCaseSource(nameof(SavingsAccountTypes))]
     public void CreatesSavingsAccountsWithCorrectAllowances(AccountType accountType, decimal expectedAllowance)
     {
-        var createdAccount = _accountFactory.CreateAccount(_accountId, _clientId, accountType, Balance);
+        var createdAccount = _accountFactory.CreateAccount(_accountId, _clientId, accountType, _accountStatus, Balance);
         
-        var expectedAccount = new SavingsAccount(_accountId, _clientId, accountType, Balance, expectedAllowance);
+        var expectedAccount = new SavingsAccount(_accountId, _clientId, accountType, _accountStatus, Balance, expectedAllowance);
         createdAccount.Should().BeEquivalentTo(expectedAccount);
     }
 
@@ -43,9 +44,9 @@ public class AccountFactoryTests
     [TestCase(AccountType.SIPP)]
     public void CreatesOtherAccountTypes(AccountType accountType)
     {
-        var createdAccount = _accountFactory.CreateAccount(_accountId, _clientId, accountType, Balance);
+        var createdAccount = _accountFactory.CreateAccount(_accountId, _clientId, accountType, _accountStatus, Balance);
 
-        var expectedAccount = new InvestmentAccount(_accountId,  _clientId, accountType, Balance);
+        var expectedAccount = new InvestmentAccount(_accountId,  _clientId, accountType, _accountStatus, Balance);
         createdAccount.Should().BeEquivalentTo(expectedAccount);
     }
     
@@ -55,7 +56,7 @@ public class AccountFactoryTests
     {
         var createdAccount = _accountFactory.NewAccount(_clientId, accountType);
         
-        var expectedAccount = new SavingsAccount(_accountId, _clientId, accountType, 0.00m, expectedAllowance);
+        var expectedAccount = new SavingsAccount(_accountId, _clientId, accountType, AccountStatus.PreOpen, 0.00m, expectedAllowance);
         createdAccount.Should().BeEquivalentTo(expectedAccount);
     }
 
@@ -66,7 +67,7 @@ public class AccountFactoryTests
     {
         var createdAccount = _accountFactory.NewAccount(_clientId, accountType);
 
-        var expectedAccount = new InvestmentAccount(_accountId,  _clientId, accountType, 0.00m);
+        var expectedAccount = new InvestmentAccount(_accountId,  _clientId, accountType, AccountStatus.PreOpen, 0.00m);
         createdAccount.Should().BeEquivalentTo(expectedAccount);
     }
 }

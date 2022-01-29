@@ -8,7 +8,7 @@ namespace MyInvest.UnitTests.Domain.Account;
 
 public class InvestmentAccountTests
 {
-    private readonly InvestmentAccount _account = new(AccountId.From(Guid.NewGuid()), Guid.NewGuid(), AccountType.GIA, 0.0m);
+    private readonly InvestmentAccount _account = new(AccountId.From(Guid.NewGuid()), Guid.NewGuid(), AccountType.GIA, AccountStatus.Open, 0.0m);
 
     [Test]
     public void AddsCreditAmountToBalance()

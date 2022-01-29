@@ -24,7 +24,7 @@ public class AccountMapperTests
         var accountId = Guid.NewGuid();
         var clientId = Guid.NewGuid();
         var balance = 12.34m;
-        var investmentAccount = new InvestmentAccount(AccountId.From(accountId), clientId, AccountType.GIA, balance);
+        var investmentAccount = new InvestmentAccount(AccountId.From(accountId), clientId, AccountType.GIA, AccountStatus.Open, balance);
 
         var actualDto = _mapper.MapToDto(investmentAccount);
 
@@ -41,7 +41,8 @@ public class AccountMapperTests
         var balance = 12.34m;
         var savingsAllowance = 200.00m;
         var savingsContributions = 100.00m;
-        var savingsAccount = new SavingsAccount(AccountId.From(accountId), clientId, AccountType.ISA, balance, savingsAllowance, savingsContributions);
+        var savingsAccount = new SavingsAccount(AccountId.From(accountId), clientId, AccountType.ISA, AccountStatus.Open, balance, savingsAllowance,
+            savingsContributions);
 
         var actualDto = _mapper.MapToDto(savingsAccount);
 

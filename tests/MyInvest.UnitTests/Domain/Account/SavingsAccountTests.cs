@@ -7,7 +7,7 @@ namespace MyInvest.UnitTests.Domain.Account;
 
 public class SavingsAccountTests
 {
-    private readonly SavingsAccount _account = new(AccountId.From(Guid.NewGuid()), Guid.NewGuid(), AccountType.ISA, 0.0m, 20_000.00m);
+    private readonly SavingsAccount _account = new(AccountId.From(Guid.NewGuid()), Guid.NewGuid(), AccountType.ISA,AccountStatus.Open, 0.0m, 20_000.00m);
 
     [Test]
     public void AddCashUpdatesContributionAmount()
@@ -29,12 +29,12 @@ public class SavingsAccountTests
     [Test]
     public void ConstructorThrowsExceptionIfAccountTypeIsSipp()
     {
-        Assert.Throws<ArgumentException>(() => new SavingsAccount(AccountId.From(Guid.NewGuid()), Guid.NewGuid(), AccountType.SIPP, 0.0m, 0.0m));
+        Assert.Throws<ArgumentException>(() => new SavingsAccount(AccountId.From(Guid.NewGuid()), Guid.NewGuid(), AccountType.SIPP, AccountStatus.Open, 0.0m, 0.0m));
     }
     
     [Test]
     public void ConstructorThrowsExceptionIfAccountTypeIsGia()
     {
-        Assert.Throws<ArgumentException>(() => new SavingsAccount(AccountId.From(Guid.NewGuid()), Guid.NewGuid(), AccountType.GIA, 0.0m, 0.0m));
+        Assert.Throws<ArgumentException>(() => new SavingsAccount(AccountId.From(Guid.NewGuid()), Guid.NewGuid(), AccountType.GIA, AccountStatus.Open, 0.0m, 0.0m));
     }
 }
