@@ -25,7 +25,7 @@ public class AccountOpeningService
     {
         if (!ClientExists(clientId))
         {
-            throw new ClientNotFoundException("Client " + clientId.Value + " not found");
+            throw new ClientDoesNotExistException("Client " + clientId.Value + " not found");
         }
 
         if (ClientOwnsAccountOfType(clientId, accountType))

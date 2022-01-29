@@ -65,6 +65,6 @@ public class AccountOpeningServiceTests
     {
         _clientRepository.Setup(repo => repo.GetById(_clientId)).Returns((MyInvest.Domain.Client.Client?) null);
 
-        Assert.Throws<ClientNotFoundException>(() => _openingService.OpenAccount(_clientId, AccountType.GIA));
+        Assert.Throws<ClientDoesNotExistException>(() => _openingService.OpenAccount(_clientId, AccountType.GIA));
     }
 }
