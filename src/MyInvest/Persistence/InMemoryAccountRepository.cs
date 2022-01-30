@@ -1,5 +1,5 @@
-using MyInvest.Domain.Account;
-using MyInvest.Domain.Client;
+using MyInvest.Domain.Accounts;
+using MyInvest.Domain.Clients;
 
 namespace MyInvest.Persistence;
 

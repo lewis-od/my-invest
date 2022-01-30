@@ -1,13 +1,13 @@
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using MyInvest;
-using MyInvest.Domain.Account;
-using MyInvest.Domain.Client;
-using MyInvest.Domain.Id;
+using MyInvest.Domain.Accounts;
+using MyInvest.Domain.Clients;
+using MyInvest.Domain.Ids;
 using MyInvest.Persistence;
 using MyInvest.REST;
-using MyInvest.REST.Account;
-using MyInvest.REST.Client;
+using MyInvest.REST.Accounts;
+using MyInvest.REST.Clients;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);

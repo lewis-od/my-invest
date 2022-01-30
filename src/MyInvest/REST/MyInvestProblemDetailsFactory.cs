@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using MyInvest.Domain.Account;
-using MyInvest.Domain.Client;
+using MyInvest.Domain.Accounts;
+using MyInvest.Domain.Clients;
 
 namespace MyInvest.REST;
 

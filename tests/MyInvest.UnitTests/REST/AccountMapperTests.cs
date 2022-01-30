@@ -1,8 +1,8 @@
 using System;
 using FluentAssertions;
-using MyInvest.Domain.Account;
+using MyInvest.Domain.Accounts;
 using MyInvest.REST;
-using MyInvest.REST.Account;
+using MyInvest.REST.Accounts;
 using NUnit.Framework;
 
 namespace MyInvest.UnitTests.REST;

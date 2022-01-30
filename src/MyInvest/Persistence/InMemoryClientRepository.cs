@@ -1,4 +1,4 @@
-using MyInvest.Domain.Client;
+using MyInvest.Domain.Clients;
 
 namespace MyInvest.Persistence;
 

@@ -1,7 +1,7 @@
 using AutoMapper;
-using MyInvest.Domain.Account;
-using MyInvest.REST.Account;
-using MyInvest.REST.Client;
+using MyInvest.Domain.Accounts;
+using MyInvest.REST.Accounts;
+using MyInvest.REST.Clients;
 
 namespace MyInvest.REST;
 
@@ -15,6 +15,6 @@ public class RestMapperModule : IMapperModule
             .ForMember(dto => dto.Status, member => member.MapFrom(account => account.AccountStatus))
             .ForPath(dto => dto.Savings!.Allowance, member => member.MapFrom(account => account.SavingsAllowance))
             .ForPath(dto => dto.Savings!.Contributions, member => member.MapFrom(account => account.SavingsContributions));
-        config.CreateMap<Domain.Client.Client, ClientDto>();
+        config.CreateMap<Domain.Clients.Client, ClientDto>();
     }
 }
