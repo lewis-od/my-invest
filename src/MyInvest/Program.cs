@@ -1,10 +1,12 @@
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using MyInvest;
 using MyInvest.Domain.Accounts;
 using MyInvest.Domain.Clients;
 using MyInvest.Domain.Ids;
 using MyInvest.Persistence;
+using MyInvest.Persistence.Clients;
 using MyInvest.REST;
 using MyInvest.REST.Accounts;
 using MyInvest.REST.Clients;
@@ -21,12 +23,19 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 });
 builder.Services.AddTransient<ProblemDetailsFactory, MyInvestProblemDetailsFactory>();
 
+builder.Services.AddDbContext<MyInvestDbContext>(options =>
+{
+    var connectionString = builder.Configuration.GetConnectionString("Postgres");
+    options.UseNpgsql(connectionString);
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var mapperConfig = new AutoMapperConfig();
 mapperConfig.RegisterModule(new RestMapperModule());
+mapperConfig.RegisterModule(new PersistenceMapperModule());
 
 var mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
@@ -35,12 +44,14 @@ builder.Services.AddSingleton<AccountMapper>();
 builder.Services.AddSingleton<IUniqueIdGenerator<AccountId>, AccountIdGenerator>();
 builder.Services.AddSingleton<AccountFactory>();
 builder.Services.AddSingleton<IAccountRepository, InMemoryAccountRepository>();
-builder.Services.AddSingleton<AccountOpeningService>();
+builder.Services.AddScoped<AccountOpeningService>();
 
-builder.Services.AddSingleton<ClientMapper>();
+builder.Services.AddSingleton<ClientDtoMapper>();
+builder.Services.AddSingleton<ClientEntityMapper>();
 builder.Services.AddSingleton<IUniqueIdGenerator<ClientId>, ClientIdGenerator>();
-builder.Services.AddSingleton<IClientRepository, InMemoryClientRepository>();
-builder.Services.AddSingleton<ClientService>();
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<ClientDao>();
+builder.Services.AddScoped<ClientService>();
 
 var app = builder.Build();
 

@@ -1,4 +1,3 @@
-using System.Collections;
 using AutoMapper;
 
 namespace MyInvest;

@@ -3,11 +3,11 @@ using MyInvest.Domain.Clients;
 
 namespace MyInvest.REST.Clients;
 
-public class ClientMapper
+public class ClientDtoMapper
 {
     private readonly IMapper _mapper;
 
-    public ClientMapper(IMapper mapper)
+    public ClientDtoMapper(IMapper mapper)
     {
         _mapper = mapper;
     }

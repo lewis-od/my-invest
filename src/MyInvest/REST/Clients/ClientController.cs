@@ -9,13 +9,13 @@ public class ClientController : ControllerBase
 {
     private readonly ClientService _clientService;
     private readonly IClientRepository _clientRepository;
-    private readonly ClientMapper _clientMapper;
+    private readonly ClientDtoMapper _clientDtoMapper;
 
-    public ClientController(ClientService clientService, IClientRepository clientRepository, ClientMapper clientMapper)
+    public ClientController(ClientService clientService, IClientRepository clientRepository, ClientDtoMapper clientDtoMapper)
     {
         _clientService = clientService;
         _clientRepository = clientRepository;
-        _clientMapper = clientMapper;
+        _clientDtoMapper = clientDtoMapper;
     }
 
     [HttpPost]
@@ -23,7 +23,7 @@ public class ClientController : ControllerBase
     public ActionResult<ClientDto> SignUp([FromBody] SignUpRequestDto signUpRequest)
     {
         var newClient = _clientService.SignUp(signUpRequest.Username);
-        return _clientMapper.MapToDto(newClient);
+        return _clientDtoMapper.MapToDto(newClient);
     }
 
     [HttpGet]
@@ -36,6 +36,6 @@ public class ClientController : ControllerBase
             return NotFound();
         }
 
-        return _clientMapper.MapToDto(client);
+        return _clientDtoMapper.MapToDto(client);
     }
 }
