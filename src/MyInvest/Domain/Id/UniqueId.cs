@@ -4,7 +4,7 @@ public abstract class UniqueId
 {
     public Guid Value { get; }
 
-    public UniqueId(Guid value)
+    protected UniqueId(Guid value)
     {
         Value = value;
     }
@@ -32,5 +32,10 @@ public abstract class UniqueId
         return Value.GetHashCode();
     }
     
+    public override string ToString()
+    {
+        return Value.ToString();
+    }
+
     public static implicit operator Guid(UniqueId id) => id.Value;
 }

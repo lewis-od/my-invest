@@ -7,12 +7,19 @@ public class AccountOpeningService
     private readonly AccountFactory _accountFactory;
     private readonly IAccountRepository _accountRepository;
     private readonly IClientRepository _clientRepository;
+    private readonly ILogger<AccountOpeningService> _logger;
 
-    public AccountOpeningService(AccountFactory accountFactory, IAccountRepository accountRepository, IClientRepository clientRepository)
+    public AccountOpeningService(
+        AccountFactory accountFactory,
+        IAccountRepository accountRepository,
+        IClientRepository clientRepository,
+        ILogger<AccountOpeningService> logger
+    )
     {
         _accountFactory = accountFactory;
         _accountRepository = accountRepository;
         _clientRepository = clientRepository;
+        _logger = logger;
     }
 
     public InvestmentAccount OpenAccount(ClientId clientId, AccountType accountType)
@@ -41,6 +48,7 @@ public class AccountOpeningService
 
     private InvestmentAccount CreateAccount(ClientId clientId, AccountType accountType)
     {
+        _logger.LogInformation("Opening account of type {AccountType} for client {ClientId}", accountType, clientId);
         var newAccount = _accountFactory.NewAccount(clientId, accountType);
         _accountRepository.Create(newAccount);
         return newAccount;

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using MyInvest.Domain.Account;
 using MyInvest.Domain.Client;
@@ -23,7 +24,12 @@ public class AccountOpeningServiceTests
         var accountIdGenerator = new FixedIdGenerator<AccountId>(_accountId);
         var accountFactory = new AccountFactory(accountIdGenerator);
 
-        _openingService = new AccountOpeningService(accountFactory, _accountRepository.Object, _clientRepository.Object);
+        _openingService = new AccountOpeningService(
+            accountFactory,
+            _accountRepository.Object,
+            _clientRepository.Object,
+            Mock.Of<ILogger<AccountOpeningService>>()
+        );
     }
 
     [Test]
@@ -36,7 +42,7 @@ public class AccountOpeningServiceTests
 
         var expectedAccount = new InvestmentAccount(_accountId, _clientId, AccountType.GIA, AccountStatus.PreOpen, 0.0m);
         openedAccount.Should().BeEquivalentTo(expectedAccount);
-        _accountRepository.Verify(repo => repo.Create(It.Is<InvestmentAccount>( account => Equals(account.AccountId, expectedAccount.AccountId))));
+        _accountRepository.Verify(repo => repo.Create(It.Is<InvestmentAccount>(account => Equals(account.AccountId, expectedAccount.AccountId))));
     }
 
     [Test]

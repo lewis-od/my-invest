@@ -1,4 +1,3 @@
-using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using MyInvest;
@@ -9,8 +8,11 @@ using MyInvest.Persistence;
 using MyInvest.REST;
 using MyInvest.REST.Account;
 using MyInvest.REST.Client;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((_, loggerConfiguration) => loggerConfiguration.ReadFrom.Configuration(builder.Configuration));
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
