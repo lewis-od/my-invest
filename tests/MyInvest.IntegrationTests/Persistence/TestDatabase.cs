@@ -5,7 +5,11 @@ namespace MyInvest.IntegrationTests.Persistence;
 
 public class TestDatabase
 {
-    private const string ConnectionString = "Host=localhost;Port=5432;Database=myinvest;Username=myinvest;Password=topsecret";
+    private const int DbPort = 5433;
+    private const string DbName = "myinvest-tests";
+    private const string DbUsername = "myinvest-tests";
+    private const string DbPassword = "testingdb";
+    private static readonly string ConnectionString = $"Host=localhost;Port={DbPort};Database={DbName};Username={DbUsername};Password={DbPassword}";
 
     private static readonly object _lock = new();
     private static bool _databaseHasBeenInitialised;

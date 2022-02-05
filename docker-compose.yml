@@ -7,3 +7,16 @@ services:
       POSTGRES_PASSWORD: 'topsecret'
     ports:
       - '5432:5432'
+    volumes:
+      - dev-volume:/var/lib/postgresql/data
+  
+  test-postgres:
+    image: 'postgres:14.1'
+    environment:
+      POSTGRES_USER: 'myinvest-tests'
+      POSTGRES_PASSWORD: 'testingdb'
+    ports:
+      - '5433:5432'
+
+volumes:
+  dev-volume:
