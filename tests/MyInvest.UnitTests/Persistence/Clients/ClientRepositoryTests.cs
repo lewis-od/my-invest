@@ -14,41 +14,39 @@ namespace MyInvest.UnitTests.Persistence.Clients;
 public class ClientRepositoryTests
 {
     private readonly Mock<IClientDao> _clientDao = new();
+    private readonly Mock<IEntityMapper<ClientEntity, Client>> _clientMapper = new();
 
     private readonly ClientRepository _repository;
 
     public ClientRepositoryTests()
     {
-        var mapper = new MapperConfiguration(cfg => cfg.AddProfile<PersistenceMapperProfile>()).CreateMapper();
-        var clientMapper = new ClientEntityMapper(mapper);
-        _repository = new ClientRepository(_clientDao.Object, clientMapper);
+        _repository = new ClientRepository(_clientDao.Object, _clientMapper.Object);
     }
 
     [Test]
     public void CreatesNewClient()
     {
-        var clientId = Guid.NewGuid();
-        const string username = "lewis";
-        var client = new Client(ClientId.From(clientId), username, Enumerable.Empty<InvestmentAccount>());
+        var client = new Client(ClientId.From(Guid.NewGuid()), "lewis", Enumerable.Empty<InvestmentAccount>());
+        var entity = new ClientEntity();
+        _clientMapper.Setup(mapper => mapper.MapToEntity(client)).Returns(entity);
         
         _repository.Create(client);
 
-        var expectedEntity = new ClientEntity {ClientId = clientId, Username = username};
-        _clientDao.Verify(dao => dao.CreateClient(expectedEntity));
+        _clientDao.Verify(dao => dao.CreateClient(entity));
     }
 
     [Test]
     public void ReturnsClientById()
     {
         var clientId = Guid.NewGuid();
-        const string username = "lewis";
-        var clientEntity = new ClientEntity {ClientId = clientId, Username = username};
+        var clientEntity = new ClientEntity();
         _clientDao.Setup(dao => dao.GetById(clientId)).Returns(clientEntity);
+        var retrievedClient = new Client(ClientId.From(clientId), "lewis", Enumerable.Empty<InvestmentAccount>());
+        _clientMapper.Setup(mapper => mapper.MapFromEntity(clientEntity)).Returns(retrievedClient);
 
         var client = _repository.GetById(ClientId.From(clientId));
 
-        var expectedClient = new Client(ClientId.From(clientId), username, Enumerable.Empty<InvestmentAccount>());
-        client.Should().BeEquivalentTo(expectedClient);
+        client.Should().BeEquivalentTo(retrievedClient);
     }
 
     [Test]

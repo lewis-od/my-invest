@@ -4,7 +4,7 @@ using MyInvest.Domain.Clients;
 
 namespace MyInvest.Persistence.Clients;
 
-public class ClientEntityMapper
+public class ClientEntityMapper : IEntityMapper<ClientEntity, Client>
 {
     private readonly IMapper _mapper;
 

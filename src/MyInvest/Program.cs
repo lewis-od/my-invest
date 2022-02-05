@@ -44,7 +44,7 @@ builder.Services.AddSingleton<IAccountRepository, InMemoryAccountRepository>();
 builder.Services.AddScoped<AccountOpeningService>();
 
 builder.Services.AddSingleton<ClientDtoMapper>();
-builder.Services.AddSingleton<ClientEntityMapper>();
+builder.Services.AddSingleton<IEntityMapper<ClientEntity, Client>, ClientEntityMapper>();
 builder.Services.AddSingleton<IUniqueIdGenerator<ClientId>, ClientIdGenerator>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IClientDao, ClientDao>();
