@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using MyInvest;
@@ -44,7 +43,7 @@ builder.Services.AddSingleton<IAccountRepository, InMemoryAccountRepository>();
 builder.Services.AddScoped<AccountOpeningService>();
 
 builder.Services.AddSingleton<ClientDtoMapper>();
-builder.Services.AddSingleton<IEntityMapper<ClientEntity, Client>, ClientEntityMapper>();
+builder.Services.AddSingleton<IClientEntityMapper, ClientEntityMapper>();
 builder.Services.AddSingleton<IUniqueIdGenerator<ClientId>, ClientIdGenerator>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IClientDao, ClientDao>();

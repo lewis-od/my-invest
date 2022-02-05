@@ -1,11 +1,9 @@
 using System;
 using System.Linq;
-using AutoMapper;
 using FluentAssertions;
 using Moq;
 using MyInvest.Domain.Accounts;
 using MyInvest.Domain.Clients;
-using MyInvest.Persistence;
 using MyInvest.Persistence.Clients;
 using NUnit.Framework;
 
@@ -14,7 +12,7 @@ namespace MyInvest.UnitTests.Persistence.Clients;
 public class ClientRepositoryTests
 {
     private readonly Mock<IClientDao> _clientDao = new();
-    private readonly Mock<IEntityMapper<ClientEntity, Client>> _clientMapper = new();
+    private readonly Mock<IClientEntityMapper> _clientMapper = new();
 
     private readonly ClientRepository _repository;
 

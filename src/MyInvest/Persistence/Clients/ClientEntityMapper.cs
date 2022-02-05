@@ -4,7 +4,13 @@ using MyInvest.Domain.Clients;
 
 namespace MyInvest.Persistence.Clients;
 
-public class ClientEntityMapper : IEntityMapper<ClientEntity, Client>
+public interface IClientEntityMapper
+{
+    ClientEntity MapToEntity(Client client);
+    Client MapFromEntity(ClientEntity entity);
+}
+
+public class ClientEntityMapper : IClientEntityMapper
 {
     private readonly IMapper _mapper;
 

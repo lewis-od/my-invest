@@ -5,9 +5,9 @@ namespace MyInvest.Persistence.Clients;
 public class ClientRepository : IClientRepository
 {
     private readonly IClientDao _clientDao;
-    private readonly IEntityMapper<ClientEntity, Client> _entityMapper;
+    private readonly IClientEntityMapper _entityMapper;
 
-    public ClientRepository(IClientDao clientDao, IEntityMapper<ClientEntity, Client> entityMapper)
+    public ClientRepository(IClientDao clientDao, IClientEntityMapper entityMapper)
     {
         _clientDao = clientDao;
         _entityMapper = entityMapper;
