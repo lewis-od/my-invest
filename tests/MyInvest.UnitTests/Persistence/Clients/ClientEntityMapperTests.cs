@@ -6,6 +6,7 @@ using MyInvest.Domain.Accounts;
 using MyInvest.Domain.Clients;
 using MyInvest.Persistence;
 using MyInvest.Persistence.Clients;
+using MyInvest.UnitTests.Domain.Accounts;
 using NUnit.Framework;
 
 namespace MyInvest.UnitTests.Persistence.Clients;
@@ -26,10 +27,11 @@ public class ClientEntityMapperTests
         var clientId = Guid.NewGuid();
         const string username = "lewis";
         var entity = new ClientEntity {ClientId = clientId, Username = username};
+        var accounts = new[] { TestAccountFactory.NewAccount(clientId, AccountType.GIA) };
 
-        var client = _mapper.MapFromEntity(entity);
+        var client = _mapper.MapFromEntity(entity, accounts);
 
-        var expectedClient = new Client(ClientId.From(clientId), username, Enumerable.Empty<InvestmentAccount>());
+        var expectedClient = new Client(ClientId.From(clientId), username, accounts);
         client.Should().BeEquivalentTo(expectedClient);
     }
 

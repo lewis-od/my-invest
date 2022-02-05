@@ -7,7 +7,7 @@ namespace MyInvest.Persistence.Clients;
 public interface IClientEntityMapper
 {
     ClientEntity MapToEntity(Client client);
-    Client MapFromEntity(ClientEntity entity);
+    Client MapFromEntity(ClientEntity entity, IEnumerable<InvestmentAccount> accounts);
 }
 
 public class ClientEntityMapper : IClientEntityMapper
@@ -21,6 +21,6 @@ public class ClientEntityMapper : IClientEntityMapper
 
     public ClientEntity MapToEntity(Client client) => _mapper.Map<ClientEntity>(client);
 
-    // TODO: Find a way to replace this with AutoMapper without modifying domain model
-    public Client MapFromEntity(ClientEntity entity) => new(ClientId.From(entity.ClientId), entity.Username, Enumerable.Empty<InvestmentAccount>());
+    public Client MapFromEntity(ClientEntity entity, IEnumerable<InvestmentAccount> accounts) =>
+        new(ClientId.From(entity.ClientId), entity.Username, accounts);
 }

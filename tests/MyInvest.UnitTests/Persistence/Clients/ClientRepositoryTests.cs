@@ -5,6 +5,7 @@ using Moq;
 using MyInvest.Domain.Accounts;
 using MyInvest.Domain.Clients;
 using MyInvest.Persistence.Clients;
+using MyInvest.UnitTests.Domain.Accounts;
 using NUnit.Framework;
 
 namespace MyInvest.UnitTests.Persistence.Clients;
@@ -13,12 +14,13 @@ public class ClientRepositoryTests
 {
     private readonly Mock<IClientDao> _clientDao = new();
     private readonly Mock<IClientEntityMapper> _clientMapper = new();
+    private readonly Mock<IAccountRepository> _accountRepository = new();
 
-    private readonly ClientRepository _repository;
+    private readonly ClientRepository _clientRepository;
 
     public ClientRepositoryTests()
     {
-        _repository = new ClientRepository(_clientDao.Object, _clientMapper.Object);
+        _clientRepository = new ClientRepository(_clientDao.Object, _clientMapper.Object, _accountRepository.Object);
     }
 
     [Test]
@@ -28,7 +30,7 @@ public class ClientRepositoryTests
         var entity = new ClientEntity();
         _clientMapper.Setup(mapper => mapper.MapToEntity(client)).Returns(entity);
         
-        _repository.Create(client);
+        _clientRepository.Create(client);
 
         _clientDao.Verify(dao => dao.CreateClient(entity));
     }
@@ -39,10 +41,14 @@ public class ClientRepositoryTests
         var clientId = Guid.NewGuid();
         var clientEntity = new ClientEntity();
         _clientDao.Setup(dao => dao.GetById(clientId)).Returns(clientEntity);
-        var retrievedClient = new Client(ClientId.From(clientId), "lewis", Enumerable.Empty<InvestmentAccount>());
-        _clientMapper.Setup(mapper => mapper.MapFromEntity(clientEntity)).Returns(retrievedClient);
 
-        var client = _repository.GetById(ClientId.From(clientId));
+        var accounts = new[] {TestAccountFactory.NewAccount(clientId, AccountType.GIA)};
+        _accountRepository.Setup(repo => repo.FindByClientId(ClientId.From(clientId))).Returns(accounts);
+        
+        var retrievedClient = new Client(ClientId.From(clientId), "lewis", accounts);
+        _clientMapper.Setup(mapper => mapper.MapFromEntity(clientEntity, accounts)).Returns(retrievedClient);
+
+        var client = _clientRepository.GetById(ClientId.From(clientId));
 
         client.Should().BeEquivalentTo(retrievedClient);
     }
@@ -53,7 +59,7 @@ public class ClientRepositoryTests
         var clientId = Guid.NewGuid();
         _clientDao.Setup(dao => dao.GetById(clientId)).Returns((ClientEntity?) null);
 
-        var client = _repository.GetById(ClientId.From(clientId));
+        var client = _clientRepository.GetById(ClientId.From(clientId));
         
         Assert.IsNull(client);
     }

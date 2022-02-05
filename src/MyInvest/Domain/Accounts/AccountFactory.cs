@@ -10,6 +10,8 @@ public class AccountFactory
 
     private readonly IUniqueIdGenerator<AccountId> _idGenerator;
 
+    public static AccountFactory NewFactory() => new (new AccountIdGenerator());
+
     public AccountFactory(IUniqueIdGenerator<AccountId> idGenerator)
     {
         _idGenerator = idGenerator;
