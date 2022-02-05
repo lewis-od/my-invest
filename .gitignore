@@ -7,3 +7,6 @@
 
 # User settings
 *.DotSettings.user
+
+# macOS
+**/.DS_Store
