@@ -1,8 +1,13 @@
-using Microsoft.EntityFrameworkCore;
-
 namespace MyInvest.Persistence.Clients;
 
-public class ClientDao
+public interface IClientDao
+{
+    void CreateClient(ClientEntity clientEntity);
+    ClientEntity? GetById(Guid clientId);
+    bool UsernameExists(string username);
+}
+
+public class ClientDao : IClientDao
 {
     private readonly MyInvestDbContext _dbContext;
 
@@ -11,7 +16,7 @@ public class ClientDao
         _dbContext = dbContext;
     }
 
-    public virtual void CreateClient(ClientEntity clientEntity)
+    public void CreateClient(ClientEntity clientEntity)
     {
         _dbContext.Clients.Add(clientEntity);
         _dbContext.SaveChanges();

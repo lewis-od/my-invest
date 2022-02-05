@@ -8,7 +8,7 @@ using MyInvest.Persistence;
 using MyInvest.Persistence.Clients;
 using NUnit.Framework;
 
-namespace MyInvest.UnitTests.Persistence;
+namespace MyInvest.UnitTests.Persistence.Clients;
 
 public class ClientEntityMapperTests
 {

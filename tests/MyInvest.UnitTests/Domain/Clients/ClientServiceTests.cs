@@ -35,7 +35,7 @@ public class ClientServiceTests
 
         var expectedClient = new Client(_clientId, username, Enumerable.Empty<InvestmentAccount>());
         newClient.Should().BeEquivalentTo(expectedClient);
-        _clientRepository.Verify(o => o.Save(newClient));
+        _clientRepository.Verify(o => o.Create(newClient));
     }
 
     [Test]

@@ -47,7 +47,7 @@ builder.Services.AddSingleton<ClientDtoMapper>();
 builder.Services.AddSingleton<ClientEntityMapper>();
 builder.Services.AddSingleton<IUniqueIdGenerator<ClientId>, ClientIdGenerator>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
-builder.Services.AddScoped<ClientDao>();
+builder.Services.AddScoped<IClientDao, ClientDao>();
 builder.Services.AddScoped<ClientService>();
 
 var app = builder.Build();

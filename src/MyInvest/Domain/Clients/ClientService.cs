@@ -26,7 +26,7 @@ public class ClientService
         var clientId = _clientIdGenerator.Generate();
         var newClient = new Client(clientId, username, Enumerable.Empty<InvestmentAccount>());
         _logger.LogInformation("Creating new client with ID {ClientId}", clientId);
-        _clientRepository.Save(newClient);
+        _clientRepository.Create(newClient);
         return newClient;
     }
 }
