@@ -1,4 +1,5 @@
 using System;
+using AutoMapper;
 using FluentAssertions;
 using MyInvest.Domain.Accounts;
 using MyInvest.REST;
@@ -13,7 +14,7 @@ public class AccountMapperTests
 
     public AccountMapperTests()
     {
-        var mapperConfig = new AutoMapperConfig(new RestMapperModule());
+        var mapperConfig = new MapperConfiguration(cfg => cfg.AddProfile<RestMapperProfile>());
         _mapper = new AccountMapper(mapperConfig.CreateMapper());
     }
 
@@ -28,7 +29,7 @@ public class AccountMapperTests
         var actualDto = _mapper.MapToDto(investmentAccount);
 
         var expectedDto = new AccountDto
-            {AccountId = accountId, AccountType = AccountTypeDto.GIA, Status = AccountStatusDto.Open, Balance = balance};
+            {AccountId = accountId, AccountType = AccountTypeDto.GIA, Status = AccountStatusDto.Open, Balance = balance, Savings = null};
         actualDto.Should().BeEquivalentTo(expectedDto);
     }
 

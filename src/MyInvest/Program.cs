@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using MyInvest;
@@ -33,12 +34,8 @@ builder.Services.AddDbContext<MyInvestDbContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var mapperConfig = new AutoMapperConfig();
-mapperConfig.RegisterModule(new RestMapperModule());
-mapperConfig.RegisterModule(new PersistenceMapperModule());
-
-var mapper = mapperConfig.CreateMapper();
-builder.Services.AddSingleton(mapper);
+var mapperConfig = AutoMapperConfigFactory.Create();
+builder.Services.AddSingleton(mapperConfig.CreateMapper());
 
 builder.Services.AddSingleton<AccountMapper>();
 builder.Services.AddSingleton<IUniqueIdGenerator<AccountId>, AccountIdGenerator>();

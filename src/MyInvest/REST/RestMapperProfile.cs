@@ -5,16 +5,17 @@ using MyInvest.REST.Clients;
 
 namespace MyInvest.REST;
 
-public class RestMapperModule : IMapperModule
+public class RestMapperProfile : Profile
 {
-    public void Configure(IMapperConfigurationExpression config)
+    public RestMapperProfile()
     {
-        config.CreateMap<InvestmentAccount, AccountDto>()
-            .ForMember(dto => dto.Status, member => member.MapFrom(account => account.AccountStatus));
-        config.CreateMap<SavingsAccount, AccountDto>()
+        CreateMap<InvestmentAccount, AccountDto>()
+            .ForMember(dto => dto.Status, member => member.MapFrom(account => account.AccountStatus))
+            .ForMember(dto => dto.Savings, member => member.MapFrom<SavingsDto?>(account => null));
+        CreateMap<SavingsAccount, AccountDto>()
             .ForMember(dto => dto.Status, member => member.MapFrom(account => account.AccountStatus))
             .ForPath(dto => dto.Savings!.Allowance, member => member.MapFrom(account => account.SavingsAllowance))
             .ForPath(dto => dto.Savings!.Contributions, member => member.MapFrom(account => account.SavingsContributions));
-        config.CreateMap<Domain.Clients.Client, ClientDto>();
+        CreateMap<Domain.Clients.Client, ClientDto>();
     }
 }

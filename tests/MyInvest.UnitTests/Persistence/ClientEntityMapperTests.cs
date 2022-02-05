@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using AutoMapper;
 using FluentAssertions;
 using MyInvest.Domain.Accounts;
 using MyInvest.Domain.Clients;
@@ -15,7 +16,7 @@ public class ClientEntityMapperTests
 
     public ClientEntityMapperTests()
     {
-        var mapperConfig = new AutoMapperConfig(new PersistenceMapperModule());
+        var mapperConfig = new MapperConfiguration(cfg => cfg.AddProfile<PersistenceMapperProfile>());
         _mapper = new ClientEntityMapper(mapperConfig.CreateMapper());
     }
 
