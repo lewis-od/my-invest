@@ -29,11 +29,21 @@ public class ClientServiceTests
     public void CreatesNewClient()
     {
         const string username = "lewis";
+        _clientRepository.Setup(repo => repo.IsUsernameTaken(username)).Returns(false);
 
         var newClient = _clientService.SignUp(username);
 
         var expectedClient = new Client(_clientId, username, Enumerable.Empty<InvestmentAccount>());
         newClient.Should().BeEquivalentTo(expectedClient);
         _clientRepository.Verify(o => o.Save(newClient));
+    }
+
+    [Test]
+    public void ThrowsExceptionIfUsernameInUse()
+    {
+        const string username = "lewis";
+        _clientRepository.Setup(repo => repo.IsUsernameTaken(username)).Returns(true);
+
+        Assert.Throws<UsernameTakenException>(() => _clientService.SignUp(username));
     }
 }

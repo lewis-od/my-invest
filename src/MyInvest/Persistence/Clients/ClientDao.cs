@@ -21,4 +21,6 @@ public class ClientDao
         .Where(client => client.ClientId == clientId)
         .ToList()
         .FirstOrDefault((ClientEntity?) null);
+
+    public bool UsernameExists(string username) => _dbContext.Clients.Any(client => client.Username == username);
 }

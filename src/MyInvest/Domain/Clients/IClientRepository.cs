@@ -4,4 +4,5 @@ public interface IClientRepository
 {
     public void Save(Client client);
     public Client? GetById(ClientId clientId);
+    public bool IsUsernameTaken(string username);
 }

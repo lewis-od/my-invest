@@ -18,6 +18,11 @@ public class ClientService
 
     public Client SignUp(string username)
     {
+        if (_clientRepository.IsUsernameTaken(username))
+        {
+            throw new UsernameTakenException($"Username '{username}' is already in use.");
+        }
+        
         var clientId = _clientIdGenerator.Generate();
         var newClient = new Client(clientId, username, Enumerable.Empty<InvestmentAccount>());
         _logger.LogInformation("Creating new client with ID {ClientId}", clientId);

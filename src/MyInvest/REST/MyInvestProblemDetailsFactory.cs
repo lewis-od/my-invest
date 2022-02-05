@@ -26,6 +26,7 @@ public class MyInvestProblemDetailsFactory : ProblemDetailsFactory
                 exception.Message, instance),
             ClientAlreadyOwnsAccountException exception => NewProblemDetails(httpContext, StatusCodes.Status400BadRequest,
                 "Client already owns account", type, exception.Message, instance),
+            UsernameTakenException exception => NewProblemDetails(httpContext, StatusCodes.Status400BadRequest, "Username taken", type, exception.Message, instance),
             _ => NewProblemDetails(httpContext, statusCode, title, type, detail, instance)
         };
     }

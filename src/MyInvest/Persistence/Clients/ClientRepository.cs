@@ -20,4 +20,6 @@ public class ClientRepository : IClientRepository
         var entity = _clientDao.GetById(clientId.Value);
         return entity != null ? _entityMapper.MapFromEntity(entity) : null;
     }
+
+    public bool IsUsernameTaken(string username) => _clientDao.UsernameExists(username);
 }
