@@ -5,7 +5,7 @@ namespace MyInvest.Persistence;
 
 public class MyInvestDbContext : DbContext
 {
-    public DbSet<ClientEntity> Clients { get; set; }
+    public DbSet<ClientEntity> Clients { get; set; } = null!;
 
     public MyInvestDbContext(DbContextOptions options) : base(options)
     {

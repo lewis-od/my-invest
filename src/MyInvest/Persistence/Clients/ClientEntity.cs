@@ -11,8 +11,8 @@ public class ClientEntity
     [Key]
     [Column("client_id")]
     public Guid ClientId { get; set; }
-    
+
     [Required]
     [Column("username")]
-    public string Username { get; set; }
+    public string Username { get; set; } = null!;
 }
