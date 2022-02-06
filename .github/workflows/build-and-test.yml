@@ -146,11 +146,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         
-      - name: Build image
-        run: docker build -t ghcr.io/lewis-od/my-invest/myinvest:${{ github.run_id }} .
-        
-      - name: Push image
-        run: docker push ghcr.io/lewis-od/my-invest/myinvest:${{ github.run_id }}
+      - name: Docker login
+        uses: docker/login-action@1.12.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Build and push
+        uses: docker/build-push-action@2.9.0
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/lewis-od/my-invest/myinvest:${{ github.run_id }}
   
   migrations_container:
     name: Build & push migrations container
@@ -166,12 +174,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Build image
-        run: |
-          docker build \
-            -t ghcr.io/lewis-od/my-invest/myinvest-migrations:${{ github.run_id }} \
-            -f Dockerfile.migrations \
-            .
+      - name: Docker login
+        uses: docker/login-action@1.12.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Push image
-        run: docker push ghcr.io/lewis-od/my-invest/myinvest-migrations:${{ github.run_id }}
+      - name: Build and push
+        uses: docker/build-push-action@2.9.0
+        with:
+          context: .
+          file: Dockerfile.migrations
+          push: true
+          tags: ghcr.io/lewis-od/my-invest/myinvest-migrations:${{ github.run_id }}
