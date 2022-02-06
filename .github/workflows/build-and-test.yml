@@ -1,0 +1,39 @@
+name: Build and test
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  compile_and_test:
+    runs-on: ubuntu-latest
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+      DOTNET_MULTILEVEL_LOOKUP: false
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore
+
+      - name: Unit test
+        run: |
+          dotnet test \
+            --no-build \
+            --verbosity normal \
+            --logger "html;LogFileName=Report.html" \
+            tests/MyInvest.UnitTest
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: unit-test-report
+          path: tests/MyInvest.UnitTest/TestResults/Report.html
