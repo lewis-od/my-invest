@@ -5,7 +5,8 @@ on:
   pull_request:
     branches: [ main ]
 jobs:
-  compile_and_test:
+  build_and_test:
+    name: Build and test
     runs-on: ubuntu-latest
     env:
       DOTNET_NOLOGO: true
@@ -31,10 +32,10 @@ jobs:
           dotnet test \
             --no-build \
             --verbosity normal \
-            --logger "html;LogFileName=Report.html" \
+            --logger "html;LogFileName=UnitTests.html" \
             tests/MyInvest.UnitTests
 
       - uses: actions/upload-artifact@v2
         with:
-          name: unit-test-report
-          path: tests/MyInvest.UnitTest/TestResults/Report.html
+          name: test-reports
+          path: tests/MyInvest.UnitTests/TestResults/UnitTests.html
