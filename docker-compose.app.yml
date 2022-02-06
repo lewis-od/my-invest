@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+  app_postgres:
+    image: 'postgres:14.1'
+    environment:
+      POSTGRES_USER: 'myinvest'
+      POSTGRES_PASSWORD: 'topsecret'
+    volumes:
+      - app-volume:/var/lib/postgresql/data
+        
+  migrations:
+    build:
+      context: 'src/MyInvest'
+      dockerfile: 'Dockerfile.migrations'
+    image: myinvest-migrations:latest
+    init: true
+    environment:
+      ConnectionStrings__Postgres: 'Host=app_postgres;Port=5432;Database=myinvest;Username=myinvest;Password=topsecret'
+    depends_on:
+      app_postgres:
+        condition: service_started
+  
+  myinvest:
+    build:
+      context: 'src/MyInvest'
+    image: 'myinvest:latest'
+    environment:
+      ConnectionStrings__Postgres: 'Host=app_postgres;Port=5432;Database=myinvest;Username=myinvest;Password=topsecret'
+    ports:
+      - '8080:80'
+    depends_on:
+      migrations:
+        # Undocumented feature of docker compose, see https://stackoverflow.com/a/70327319/1221788
+        condition: service_completed_successfully
+
+volumes:
+  app-volume:

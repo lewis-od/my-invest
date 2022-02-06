@@ -7,7 +7,7 @@
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <PreserveCompilationContext>true</PreserveCompilationContext>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-        <RestoreLockedMode>true</RestoreLockedMode>
+        <RuntimeIdentifiers>osx-x64;linux-x64;win-x64</RuntimeIdentifiers>
     </PropertyGroup>
 
     <ItemGroup>
