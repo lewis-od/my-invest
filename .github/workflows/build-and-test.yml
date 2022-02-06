@@ -125,8 +125,7 @@ jobs:
           dotnet test \
             --no-build \
             --verbosity normal \
-            --logger "html;LogFileName=IntegrationTests.html" \
-            tests/MyInvest.IntegrationTests
+            --logger "html;LogFileName=IntegrationTests.html"
 
       - uses: actions/upload-artifact@v2
         with:
