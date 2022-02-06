@@ -155,7 +155,7 @@ jobs:
         with:
           context: src/MyInvest
           push: true
-          tags: ghcr.io/lewis-od/my-invest/myinvest:${{ github.run_id }}
+          tags: ghcr.io/lewis-od/my-invest/myinvest:${{ github.run_number }}
   
   migrations_container:
     name: Build & push migrations container
@@ -181,4 +181,4 @@ jobs:
           context: src/MyInvest
           file: src/MyInvest/Dockerfile.migrations
           push: true
-          tags: ghcr.io/lewis-od/my-invest/myinvest-migrations:${{ github.run_id }}
+          tags: ghcr.io/lewis-od/my-invest/myinvest-migrations:${{ github.run_number }}
