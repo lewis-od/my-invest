@@ -131,3 +131,47 @@ jobs:
         with:
           name: test-reports
           path: tests/MyInvest.IntegrationTests/TestResults/IntegrationTests.html
+          
+  app_container:
+    name: Build & push app container
+    if: success() && github.event_name == 'push'
+    needs: 
+      - unit_test
+      - integration_test
+    runs-on: ubuntu-latest
+    defaults: 
+      run:
+        working-directory: src/MyInvest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        
+      - name: Build image
+        run: docker build -t ghcr.io/lewis-od/my-invest/myinvest:${{ github.run_id }} .
+        
+      - name: Push image
+        run: docker push ghcr.io/lewis-od/my-invest/myinvest:${{ github.run_id }}
+  
+  migrations_container:
+    name: Build & push migrations container
+    if: success() && github.event_name == 'push'
+    needs:
+      - unit_test
+      - integration_test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src/MyInvest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build image
+        run: |
+          docker build \
+            -t ghcr.io/lewis-od/my-invest/myinvest-migrations:${{ github.run_id }} \
+            -f Dockerfile.migrations \
+            .
+
+      - name: Push image
+        run: docker push ghcr.io/lewis-od/my-invest/myinvest-migrations:${{ github.run_id }}
