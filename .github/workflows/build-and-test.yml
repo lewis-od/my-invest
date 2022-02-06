@@ -179,6 +179,6 @@ jobs:
         uses: docker/build-push-action@v2.9.0
         with:
           context: src/MyInvest
-          file: Dockerfile.migrations
+          file: src/MyInvest/Dockerfile.migrations
           push: true
           tags: ghcr.io/lewis-od/my-invest/myinvest-migrations:${{ github.run_id }}
