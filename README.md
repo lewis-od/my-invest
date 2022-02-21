@@ -37,7 +37,7 @@ dotnet test src/MyInvest.IntegrationTests
 ### Creating database migrations
 To create a migration, edit the relevant entity files, then run:
 ```
-ef migrations add MigrationName --project src/MyInvest
+dotnet ef migrations add MigrationName --project src/MyInvest
 ```
 
 After checking the generated migration, you can apply it with:
