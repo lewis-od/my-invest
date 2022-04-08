@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using MyInvest.Persistence;
 using MyInvest.Persistence.Accounts;
@@ -30,21 +32,54 @@ public class InvestmentAccountDaoTests
     }
 
     [Test]
-    public void CreatesAndRetrievesAccount()
+    public void CreatesAndRetrievesAccountByAccountId()
     {
         var accountId = Guid.NewGuid();
-        var accountToCreate = new InvestmentAccountEntity
-        {
-            AccountId = accountId,
-            ClientId = Guid.NewGuid(),
-            AccountStatus = "OPEN",
-            AccountType = "GIA",
-            Balance = 13.00m,
-        };
+        var accountToCreate = NewAccount(accountId);
         
         _dao.CreateAccount(accountToCreate);
         var retrievedAccount = _dao.GetById(accountId);
 
         retrievedAccount.Should().BeEquivalentTo(accountToCreate);
     }
+
+    [Test]
+    public void CreatesAndRetrievesMultipleAccounts()
+    {
+        var account1 = NewAccount();
+        _dao.CreateAccount(account1);
+        var account2 = NewAccount();
+        _dao.CreateAccount(account2);
+
+        var retrievedAccounts = _dao.GetAll().ToList();
+
+        retrievedAccounts.Should().HaveCount(2);
+        retrievedAccounts.Should().Contain(new List<InvestmentAccountEntity> {account1, account2});
+    }
+
+    [Test]
+    public void CreatesAndRetrievesAccountsByClientId()
+    {
+        var account1 = NewAccount();
+        _dao.CreateAccount(account1);
+        var clientId = Guid.NewGuid();
+        var account2 = NewAccount(Guid.NewGuid(), clientId);
+        _dao.CreateAccount(account2);
+
+        var retrievedAccounts = _dao.FindByClientId(clientId).ToList();
+
+        retrievedAccounts.Should().HaveCount(1);
+        retrievedAccounts.Should().Contain(account2);
+    }
+
+    private static InvestmentAccountEntity NewAccount() => NewAccount(Guid.NewGuid());
+    
+    private static InvestmentAccountEntity NewAccount(Guid accountId, Guid? clientId = null) => new()
+        {
+            AccountId = accountId,
+            ClientId = clientId ?? Guid.NewGuid(),
+            AccountStatus = "Open",
+            AccountType = "GIA",
+            Balance = 13.00m,
+        };
 }

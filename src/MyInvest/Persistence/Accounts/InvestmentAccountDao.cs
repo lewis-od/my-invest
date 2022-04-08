@@ -4,6 +4,8 @@ public interface IInvestmentAccountDao
 {
     void CreateAccount(InvestmentAccountEntity account);
     InvestmentAccountEntity? GetById(Guid accountId);
+    IEnumerable<InvestmentAccountEntity> GetAll();
+    IEnumerable<InvestmentAccountEntity> FindByClientId(Guid clientId);
 }
 
 public class InvestmentAccountDao : IInvestmentAccountDao
@@ -25,4 +27,10 @@ public class InvestmentAccountDao : IInvestmentAccountDao
         .Where(account => account.AccountId == accountId)
         .ToList()
         .FirstOrDefault((InvestmentAccountEntity?) null);
+
+    public IEnumerable<InvestmentAccountEntity> GetAll() => _dbContext.InvestmentAccounts.ToList();
+
+    public IEnumerable<InvestmentAccountEntity> FindByClientId(Guid clientId) => _dbContext.InvestmentAccounts
+        .Where(account => account.ClientId == clientId)
+        .ToList();
 }

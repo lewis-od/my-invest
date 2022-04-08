@@ -6,6 +6,7 @@ using MyInvest.Domain.Accounts;
 using MyInvest.Domain.Clients;
 using MyInvest.Domain.Ids;
 using MyInvest.Persistence;
+using MyInvest.Persistence.Accounts;
 using MyInvest.Persistence.Clients;
 using MyInvest.REST;
 using MyInvest.REST.Accounts;
@@ -39,7 +40,9 @@ builder.Services.AddSingleton(mapperConfig.CreateMapper());
 builder.Services.AddSingleton<AccountMapper>();
 builder.Services.AddSingleton<IUniqueIdGenerator<AccountId>, AccountIdGenerator>();
 builder.Services.AddSingleton<AccountFactory>();
-builder.Services.AddSingleton<IAccountRepository, InMemoryAccountRepository>();
+builder.Services.AddSingleton<IInvestmentAccountEntityMapper, InvestmentAccountEntityMapper>();
+builder.Services.AddScoped<IAccountRepository, InvestmentAccountRepository>();
+builder.Services.AddScoped<IInvestmentAccountDao, InvestmentAccountDao>();
 builder.Services.AddScoped<AccountOpeningService>();
 
 builder.Services.AddSingleton<ClientDtoMapper>();

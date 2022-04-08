@@ -28,5 +28,5 @@ public class TestDatabase
         }
     }
 
-    public MyInvestDbContext CreateContext() => new (new DbContextOptionsBuilder().UseNpgsql(ConnectionString).Options);
+    public MyInvestDbContext CreateContext() => new(new DbContextOptionsBuilder().UseNpgsql(ConnectionString).Options);
 }
