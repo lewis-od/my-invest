@@ -74,14 +74,20 @@ jobs:
       - name: Build project
         run: dotnet build
 
-      - name: Unit test
+      - name: Run tests
+        continue-on-error: true
         run: |
           dotnet test \
             --no-build \
             --verbosity normal \
             --logger "html;LogFileName=${{ inputs.test_suite }}.html"
 
-      - uses: actions/upload-artifact@v2
+      - name: Upload test report 
+        uses: actions/upload-artifact@v2
         with:
           name: test-reports
           path: tests/MyInvest.${{ inputs.test_suite }}/TestResults/${{ inputs.test_suite }}.html
+      
+      - name: Stop postgres
+        if: always() && inputs.needs_db
+        run: docker stop postgres
