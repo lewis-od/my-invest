@@ -6,11 +6,6 @@ on:
         required: true
         type: string
         description: Test suite to run, e.g. 'UnitTests'
-      needs_db:
-        required: false
-        type: boolean
-        default: false
-        description: Whether or not to start a Postgres container before running tests
       db_username:
         required: false
         type: string
@@ -30,7 +25,19 @@ jobs:
   run_tests:
     name: Run tests
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/dotnet/sdk:6.0
+    services:
+      postgres:
+        image: postgres:14.1
+        ports:
+          - ${{ inputs.db_port }}:5432
+        env:
+          POSTGRES_USER: ${{ inputs.db_username }}
+          POSTGRES_PASSWORD: ${{ inputs.db_password }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     env:
       DOTNET_NOLOGO: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
@@ -41,20 +48,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        
-      - name: Start postgres
-        if: inputs.needs_db == true
-        run: |
-          docker run --rm --detach --network ${{ job.container.network }} \
-            --name postgres \
-            -e POSTGRES_USER ${{ inputs.db_username }} \
-            -e POSTGRES_PASSWORD  ${{ inputs.db_password }} \
-            -p ${{ inputs.db_port }}:5432 \
-            --health-cmd pg_isready \
-            --health-interval 10s \
-            --health-timeout 5s \
-            --health-retries 5 \
-            postgres:14.1
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
 
       - name: Restore NuGet cache
         uses: actions/cache@v2
@@ -83,7 +81,3 @@ jobs:
         with:
           name: test-reports
           path: tests/MyInvest.${{ inputs.test_suite }}/TestResults/${{ inputs.test_suite }}.html
-      
-      - name: Stop postgres
-        if: always() && inputs.needs_db
-        run: docker stop postgres

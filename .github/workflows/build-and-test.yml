@@ -41,24 +41,21 @@ jobs:
     uses: ./.github/workflows/callable-run-tests.yml
     with:
       test_suite: UnitTests
-      needs_db: false
-          
+
   integration_test:
     name: Integration test
     needs: [ compile ]
     uses: ./.github/workflows/callable-run-tests.yml
     with:
       test_suite: IntegrationTests
-      needs_db: true
-  
+
   component_test:
     name: Component test
     needs: [ compile ]
     uses: ./.github/workflows/callable-run-tests.yml
     with:
       test_suite: ComponentTests
-      needs_db: true
-          
+
   app_container:
     name: Build & push app container
     if: success() && github.event_name == 'push'
