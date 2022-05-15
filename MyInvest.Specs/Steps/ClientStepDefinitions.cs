@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.AspNetCore.Mvc.Testing;
 using MyInvest.REST.Clients;
 using MyInvest.Specs.Drivers;
 
@@ -8,14 +9,15 @@ namespace MyInvest.Specs.Steps;
 public sealed class ClientStepDefinitions
 {
     private readonly ScenarioContext _scenarioContext;
-    private readonly ClientDriver _driver = new("http://localhost:5020");
+    private readonly ClientDriver _driver;
 
     private string _username = "";
     private ClientDto? _client = null;
 
-    public ClientStepDefinitions(ScenarioContext scenarioContext)
+    public ClientStepDefinitions(ScenarioContext scenarioContext, WebApplicationFactory<Program> application)
     {
         _scenarioContext = scenarioContext;
+        _driver = new ClientDriver(application.CreateClient());
     }
     
     [Given("my username is (.*)")]

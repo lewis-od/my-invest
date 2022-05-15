@@ -1,4 +1,4 @@
-using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
 
@@ -6,32 +6,28 @@ namespace MyInvest.Specs;
 
 public class RestClient
 {
-    private const string JsonContentType = "application/json";
-
     private static readonly JsonSerializerOptions JsonDeserializerOptions = new()
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase
     };
 
-    private readonly string _baseUrl;
-    private readonly HttpClient _httpClient = new();
+    private readonly HttpClient _httpClient;
 
-    public RestClient(string baseUrl)
+    public RestClient(HttpClient httpClient)
     {
-        _baseUrl = baseUrl;
-        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(JsonContentType));
+        _httpClient = httpClient;
     }
 
     public async Task<T?> GetObject<T>(string endpoint)
     {
-        var result = await _httpClient.GetStreamAsync($"{_baseUrl}${endpoint}");
+        var result = await _httpClient.GetStreamAsync(endpoint);
         return await DeserializeJson<T>(result);
     }
 
     public async Task<TResponse?> PostObject<TPayload, TResponse>(string endpoint, TPayload payload)
     {
-        var payloadJson = new StringContent(JsonSerializer.Serialize(payload), Encoding.Default, JsonContentType);
-        var result = await _httpClient.PostAsync($"{_baseUrl}{endpoint}", payloadJson);
+        var payloadJson = new StringContent(JsonSerializer.Serialize(payload), Encoding.Default, MediaTypeNames.Application.Json);
+        var result = await _httpClient.PostAsync(endpoint, payloadJson);
         return await DeserializeJson<TResponse>(await result.Content.ReadAsStreamAsync());
     }
 

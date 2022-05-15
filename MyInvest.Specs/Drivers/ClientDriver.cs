@@ -6,9 +6,9 @@ public class ClientDriver
 {
     private readonly RestClient _restClient;
 
-    public ClientDriver(string baseUrl)
+    public ClientDriver(HttpClient httpClient)
     {
-        _restClient = new RestClient(baseUrl);
+        _restClient = new RestClient(httpClient);
     }
     
     public async Task<ClientDto?> SignUp(string username)

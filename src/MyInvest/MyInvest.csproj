@@ -33,5 +33,9 @@
       <_ContentIncludedByDefault Remove="MyInvest\obj\MyInvest.csproj.nuget.dgspec.json" />
       <_ContentIncludedByDefault Remove="MyInvest\obj\project.assets.json" />
     </ItemGroup>
+    
+    <ItemGroup>
+        <InternalsVisibleTo Include="MyInvest.Specs" />
+    </ItemGroup>
 
 </Project>
