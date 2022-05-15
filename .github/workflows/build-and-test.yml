@@ -43,149 +43,33 @@ jobs:
       run:
         working-directory: tests/MyInvest.UnitTests
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v1
+      - name: Run unit tests
+        uses: ./.github/workflows/callable-run-tests.yml
         with:
-          dotnet-version: 6.0.x
-  
-      - name: Restore NuGet cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-            
-      - name: Restore dependencies
-        run: dotnet restore --locked-mode
-        
-      - name: Build project
-        run: dotnet build
-
-      - name: Unit test
-        run: |
-          dotnet test \
-            --no-build \
-            --verbosity normal \
-            --logger "html;LogFileName=UnitTests.html"
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: test-reports
-          path: tests/MyInvest.UnitTests/TestResults/UnitTests.html
+          test_suite: UnitTests
+          needs_db: false
           
   integration_test:
     name: Integration test
     runs-on: ubuntu-latest
     needs: [ compile ]
-    defaults:
-      run:
-        working-directory: tests/MyInvest.IntegrationTests
-    services: 
-      postgres:
-        image: postgres:14.1
-        ports:
-          - 5433:5432
-        env:
-          POSTGRES_USER: 'myinvest-tests'
-          POSTGRES_PASSWORD: 'testingdb'
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v1
+      - name: Run integration tests
+        uses: ./.github/workflows/callable-run-tests.yml
         with:
-          dotnet-version: 6.0.x
-
-      - name: Restore NuGet cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-            
-      - name: Restore dependencies
-        run: dotnet restore --locked-mode
-        
-      - name: Build project
-        run: dotnet build
-
-      - name: Integration test
-        run: |
-          dotnet test \
-            --no-build \
-            --verbosity normal \
-            --logger "html;LogFileName=IntegrationTests.html"
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: test-reports
-          path: tests/MyInvest.IntegrationTests/TestResults/IntegrationTests.html
-          
+          test_suite: IntegrationTests
+          needs_db: true
+  
   component_test:
     name: Component test
     runs-on: ubuntu-latest
     needs: [ compile ]
-    defaults:
-      run:
-        working-directory: tests/MyInvest.ComponentTests
-    services:
-      postgres:
-        image: postgres:14.1
-        ports:
-          - 5433:5432
-        env:
-          POSTGRES_USER: 'myinvest-tests'
-          POSTGRES_PASSWORD: 'testingdb'
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v1
+      - name: Run component tests
+        uses: ./.github/workflows/callable-run-tests.yml
         with:
-          dotnet-version: 6.0.x
-
-      - name: Restore NuGet cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-
-      - name: Restore dependencies
-        run: dotnet restore --locked-mode
-
-      - name: Build project
-        run: dotnet build
-
-      - name: Component test
-        run: |
-          dotnet test \
-            --no-build \
-            --verbosity normal \
-            --logger "html;LogFileName=ComponentTests.html"
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: test-reports
-          path: tests/MyInvest.ComponentTests/TestResults/ComponentTests.html
+          test_suite: ComponentTests
+          needs_db: true
           
   app_container:
     name: Build & push app container

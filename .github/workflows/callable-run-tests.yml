@@ -1,0 +1,87 @@
+name: Run test suite
+on:
+  workflow_call:
+    inputs:
+      test_suite:
+        required: true
+        type: string
+        description: Test suite to run, e.g. 'UnitTests'
+      needs_db:
+        required: false
+        type: boolean
+        default: false
+        description: Whether or not to start a Postgres container before running tests
+      db_username:
+        required: false
+        type: string
+        default: 'myinvest-tests'
+        description: Username for the Postgres container
+      db_password:
+        required: false
+        type: string
+        default: 'testingdb'
+        description: Password for the Postgres container
+      db_port:
+        required: false
+        type: number
+        default: 5433
+        description: Host port to bind Postgres container's port 5432 to
+jobs:
+  run_tests:
+    name: Run tests
+    runs-on: ubuntu-latest
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+      DOTNET_MULTILEVEL_LOOKUP: false
+    defaults:
+      run:
+        working-directory: tests/MyInvest.${{ inputs.test_suite }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        
+      - name: Start postgres
+        if: inputs.needs_db == true
+        run: |
+          docker run --rm --detach --network ${{ job.container.network }} \
+            --name postgres \
+            -e POSTGRES_USER ${{ inputs.db_username }} \
+            -e POSTGRES_PASSWORD  ${{ inputs.db_password }} \
+            -p ${{ inputs.db_port }}:5432 \
+            --health-cmd pg_isready \
+            --health-interval 10s \
+            --health-timeout 5s \
+            --health-retries 5 \
+            postgres:14.1
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Restore NuGet cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore dependencies
+        run: dotnet restore --locked-mode
+
+      - name: Build project
+        run: dotnet build
+
+      - name: Unit test
+        run: |
+          dotnet test \
+            --no-build \
+            --verbosity normal \
+            --logger "html;LogFileName=${{ inputs.test_suite }}.html"
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: test-reports
+          path: tests/MyInvest.${{ inputs.test_suite }}/TestResults/${{ inputs.test_suite }}.html
