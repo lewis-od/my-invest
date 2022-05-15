@@ -26,12 +26,17 @@ dotnet tool install --global dotnet-ef
 ### Running the tests
 Unit tests can be ran with:
 ```
-dotnet test src/MyInvest.UnitTests
+dotnet test tests/MyInvest.UnitTests
 ```
 
 To run the integration tests, ensure the test database is running in Docker, then:
 ```
-dotnet test src/MyInvest.IntegrationTests
+dotnet test tests/MyInvest.IntegrationTests
+```
+
+To run the component tests, ensure the test database is running in Docker, then:
+```
+dotnet test tests/MyInvest.Specs
 ```
 
 ### Creating database migrations
