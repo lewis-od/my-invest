@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace MyInvest.Specs.Features
+namespace MyInvest.ComponentTests.Features
 {
     using TechTalk.SpecFlow;
     using System;

@@ -1,9 +1,9 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
+using MyInvest.ComponentTests.Drivers;
 using MyInvest.REST.Clients;
-using MyInvest.Specs.Drivers;
 
-namespace MyInvest.Specs.Steps;
+namespace MyInvest.ComponentTests.Steps;
 
 [Binding]
 public sealed class ClientStepDefinitions

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MyInvest.Persistence;
 
-namespace MyInvest.Specs;
+namespace MyInvest.ComponentTests;
 
 public class MyInvestApplicationFactory : WebApplicationFactory<Program>
 {

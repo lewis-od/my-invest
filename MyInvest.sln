@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyInvest.UnitTests", "tests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyInvest.IntegrationTests", "tests\MyInvest.IntegrationTests\MyInvest.IntegrationTests.csproj", "{C4574894-904B-44A1-B33F-0DC128CC7A48}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyInvest.Specs", "tests\MyInvest.Specs\MyInvest.Specs.csproj", "{7BEDF618-A452-4C0B-A809-1BFB3A9781FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyInvest.ComponentTests", "tests\MyInvest.ComponentTests\MyInvest.ComponentTests.csproj", "{7BEDF618-A452-4C0B-A809-1BFB3A9781FD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{096D783D-F994-4774-8E55-0A3DB9466B77}"
 EndProject

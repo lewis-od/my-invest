@@ -36,7 +36,7 @@ dotnet test tests/MyInvest.IntegrationTests
 
 To run the component tests, ensure the test database is running in Docker, then:
 ```
-dotnet test tests/MyInvest.Specs
+dotnet test tests/MyInvest.ComponentTests
 ```
 
 ### Creating database migrations

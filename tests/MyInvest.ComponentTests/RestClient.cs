@@ -2,7 +2,7 @@ using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
 
-namespace MyInvest.Specs;
+namespace MyInvest.ComponentTests;
 
 public class RestClient
 {

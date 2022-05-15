@@ -1,6 +1,6 @@
 using MyInvest.REST.Clients;
 
-namespace MyInvest.Specs.Drivers;
+namespace MyInvest.ComponentTests.Drivers;
 
 public class ClientDriver
 {

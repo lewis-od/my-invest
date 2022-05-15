@@ -1,6 +1,6 @@
 using BoDi;
 
-namespace MyInvest.Specs.Hooks;
+namespace MyInvest.ComponentTests.Hooks;
 
 [Binding]
 public class WebServerHook

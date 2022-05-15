@@ -35,7 +35,7 @@
     </ItemGroup>
     
     <ItemGroup>
-        <InternalsVisibleTo Include="MyInvest.Specs" />
+        <InternalsVisibleTo Include="MyInvest.ComponentTests" />
     </ItemGroup>
 
 </Project>
