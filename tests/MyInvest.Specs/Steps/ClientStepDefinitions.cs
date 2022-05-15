@@ -29,7 +29,7 @@ public sealed class ClientStepDefinitions
     [When("I sign up")]
     public async Task WhenISignUp()
     {
-        _client = await _driver.SignUp(_username);
+        _client = await _driver.SignUpAsync(_username);
     }
     
     [Then(@"I get assigned a user ID")]

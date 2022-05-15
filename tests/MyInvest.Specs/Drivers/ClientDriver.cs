@@ -11,13 +11,13 @@ public class ClientDriver
         _restClient = new RestClient(httpClient);
     }
     
-    public async Task<ClientDto?> SignUp(string username)
+    public async Task<ClientDto?> SignUpAsync(string username)
     {
         var createClientRequest = new SignUpRequestDto
         {
             Username = username
         };
-        var result = await _restClient.PostObject<SignUpRequestDto, ClientDto>("/clients/sign-up", createClientRequest);
+        var result = await _restClient.PostObjectAsync<SignUpRequestDto, ClientDto>("/clients/sign-up", createClientRequest);
         return result;
     }
 }

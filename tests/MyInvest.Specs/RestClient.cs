@@ -18,18 +18,19 @@ public class RestClient
         _httpClient = httpClient;
     }
 
-    public async Task<T?> GetObject<T>(string endpoint)
+    public async Task<T?> GetObjectAsync<T>(string endpoint)
     {
         var result = await _httpClient.GetStreamAsync(endpoint);
-        return await DeserializeJson<T>(result);
+        return await DeserializeJsonAsync<T>(result);
     }
 
-    public async Task<TResponse?> PostObject<TPayload, TResponse>(string endpoint, TPayload payload)
+    public async Task<TResponse?> PostObjectAsync<TPayload, TResponse>(string endpoint, TPayload payload)
     {
         var payloadJson = new StringContent(JsonSerializer.Serialize(payload), Encoding.Default, MediaTypeNames.Application.Json);
         var result = await _httpClient.PostAsync(endpoint, payloadJson);
-        return await DeserializeJson<TResponse>(await result.Content.ReadAsStreamAsync());
+        return await DeserializeJsonAsync<TResponse>(await result.Content.ReadAsStreamAsync());
     }
 
-    private static async Task<T?> DeserializeJson<T>(Stream response) => await JsonSerializer.DeserializeAsync<T>(response, JsonDeserializerOptions);
+    private static async Task<T?> DeserializeJsonAsync<T>(Stream response) =>
+        await JsonSerializer.DeserializeAsync<T>(response, JsonDeserializerOptions);
 }
