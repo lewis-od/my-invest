@@ -1,6 +1,7 @@
 using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace MyInvest.ComponentTests;
 
@@ -8,7 +9,8 @@ public class RestClient
 {
     private static readonly JsonSerializerOptions JsonDeserializerOptions = new()
     {
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        Converters = { new JsonStringEnumConverter() },
     };
 
     private readonly HttpClient _httpClient;
