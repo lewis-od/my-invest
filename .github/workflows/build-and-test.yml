@@ -219,6 +219,7 @@ jobs:
     needs:
       - unit_test
       - integration_test
+      - component_test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
