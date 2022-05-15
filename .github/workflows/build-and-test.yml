@@ -44,7 +44,7 @@ jobs:
         working-directory: tests/MyInvest.UnitTests
     steps:
       - name: Run unit tests
-        uses: ./.github/workflows/callable-run-tests.yml
+        uses: ./.github/workflows/callable-run-tests
         with:
           test_suite: UnitTests
           needs_db: false
@@ -55,7 +55,7 @@ jobs:
     needs: [ compile ]
     steps:
       - name: Run integration tests
-        uses: ./.github/workflows/callable-run-tests.yml
+        uses: ./.github/workflows/callable-run-tests
         with:
           test_suite: IntegrationTests
           needs_db: true
@@ -66,7 +66,7 @@ jobs:
     needs: [ compile ]
     steps:
       - name: Run component tests
-        uses: ./.github/workflows/callable-run-tests.yml
+        uses: ./.github/workflows/callable-run-tests
         with:
           test_suite: ComponentTests
           needs_db: true
