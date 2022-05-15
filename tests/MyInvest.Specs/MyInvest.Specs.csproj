@@ -4,6 +4,9 @@
         <TargetFramework>net6.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+        <RuntimeIdentifiers>osx-x64;linux-x64;win-x64</RuntimeIdentifiers>
+        <IsPackable>false</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
