@@ -1,5 +1,5 @@
 ﻿Feature: Onboarding
-Users signing up for the platform
+	Users signing up for the platform
 
 Scenario: Sign up
 	Given my username is test-user
@@ -13,4 +13,4 @@ Scenario: Opening an account
 	Then an account with type GIA is created
 	And the account is assigned an ID
 	And the account has status PreOpen
-	And the account has balance £0.00	
+	And the account has balance £0.00

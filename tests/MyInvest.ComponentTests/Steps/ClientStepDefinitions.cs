@@ -1,7 +1,9 @@
 ﻿using Bogus;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
 using MyInvest.ComponentTests.Drivers;
+using MyInvest.Persistence.Clients;
 using MyInvest.REST.Clients;
 
 namespace MyInvest.ComponentTests.Steps;
@@ -10,18 +12,39 @@ namespace MyInvest.ComponentTests.Steps;
 public sealed class ClientStepDefinitions
 {
     public const string Username = "username";
+    public const string ClientId = "clientId";
     public const string Client = "client";
     
     private readonly ScenarioContext _scenarioContext;
     private readonly ClientDriver _driver;
     private readonly Faker _faker = new();
 
-    public ClientStepDefinitions(ScenarioContext scenarioContext, MyInvestApplicationFactory application)
+    public ClientStepDefinitions(ScenarioContext scenarioContext, MyInvestApplicationFactory application, IServiceScope scenarioScope)
     {
         _scenarioContext = scenarioContext;
-        _driver = new ClientDriver(application.CreateClient());
+        var clientDao = scenarioScope.ServiceProvider.GetRequiredService<IClientDao>();
+        _driver = new ClientDriver(application.CreateClient(), clientDao);
     }
     
+    [Given(@"a client exists")]
+    public void GivenAClientExists()
+    {
+        var username = RandomUsername();
+        _scenarioContext[Username] = username;
+        var clientId = _driver.CreateClient(username);
+        _scenarioContext[ClientId] = clientId;
+    }
+    
+    [Given(@"I have a MyInvest profile")]
+    public async Task GivenIHaveAMyInvestProfile()
+    {
+        var username = RandomUsername();
+        _scenarioContext[Username] = username;
+        _scenarioContext[Client] = await _driver.SignUpAsync(username);
+    }
+
+    private string RandomUsername() => $"{_faker.Hacker.Adjective()}-{_faker.Hacker.Noun()}";
+
     [Given("my username is (.*)")]
     public void GivenMyUsernameIs(string username)
     {
@@ -44,12 +67,5 @@ public sealed class ClientStepDefinitions
     public void ThenIHaveDInvestmentAccounts(int numAccounts)
     {
         _scenarioContext.Get<ClientDto>(Client).InvestmentAccounts.Should().HaveCount(numAccounts);
-    }
-
-    [Given(@"I have a MyInvest profile")]
-    public async Task GivenIHaveAMyInvestProfile()
-    {
-        var username = $"{_faker.Hacker.Adjective()}-{_faker.Hacker.Noun()}";
-        _scenarioContext[Client] = await _driver.SignUpAsync(username);
     }
 }

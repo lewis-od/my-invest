@@ -1,5 +1,7 @@
 using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using MyInvest.ComponentTests.Drivers;
+using MyInvest.Persistence.Accounts;
 using MyInvest.REST.Accounts;
 using MyInvest.REST.Clients;
 using static MyInvest.ComponentTests.Steps.ClientStepDefinitions;
@@ -10,14 +12,24 @@ namespace MyInvest.ComponentTests.Steps;
 public class AccountStepDefinitions
 {
     public const string Account = "account";
+    public const string AccountId = "accountId";
     
     private readonly ScenarioContext _scenarioContext;
     private readonly AccountDriver _accountDriver;
 
-    public AccountStepDefinitions(ScenarioContext scenarioContext, MyInvestApplicationFactory applicationFactory)
+    public AccountStepDefinitions(ScenarioContext scenarioContext, MyInvestApplicationFactory applicationFactory, IServiceScope scenarioScope)
     {
         _scenarioContext = scenarioContext;
-        _accountDriver = new AccountDriver(applicationFactory.CreateClient());
+        var accountDao = scenarioScope.ServiceProvider.GetRequiredService<IInvestmentAccountDao>();
+        _accountDriver = new AccountDriver(applicationFactory.CreateClient(), accountDao);
+    }
+    
+    [Given(@"they have an? ([A-Z]*) account with status ([a-zA-Z]*)")]
+    public void GivenTheyHaveAnXAccountWithStatusY(string accountType, string accountStatus)
+    {
+        var clientId = _scenarioContext.Get<Guid>(ClientId);
+        var accountId = _accountDriver.CreateAccountForClient(clientId, accountType, accountStatus);
+        _scenarioContext[AccountId] = accountId;
     }
 
     [When(@"I open a ([A-Z]*) account")]

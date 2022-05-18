@@ -35,4 +35,9 @@ public class RestClient
 
     private static async Task<T?> DeserializeJsonAsync<T>(Stream response) =>
         await JsonSerializer.DeserializeAsync<T>(response, JsonDeserializerOptions);
+
+    public async Task PutAsync(string endpoint)
+    {
+        await _httpClient.PutAsync(endpoint, null);
+    }
 }
