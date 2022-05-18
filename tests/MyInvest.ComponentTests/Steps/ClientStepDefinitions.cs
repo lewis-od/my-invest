@@ -1,6 +1,5 @@
 ﻿using Bogus;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using MyInvest.ComponentTests.Drivers;
 using MyInvest.Persistence.Clients;
@@ -19,11 +18,11 @@ public sealed class ClientStepDefinitions
     private readonly ClientDriver _driver;
     private readonly Faker _faker = new();
 
-    public ClientStepDefinitions(ScenarioContext scenarioContext, MyInvestApplicationFactory application, IServiceScope scenarioScope)
+    public ClientStepDefinitions(ScenarioContext scenarioContext, RestClient restClient, IServiceScope scenarioScope)
     {
         _scenarioContext = scenarioContext;
         var clientDao = scenarioScope.ServiceProvider.GetRequiredService<IClientDao>();
-        _driver = new ClientDriver(application.CreateClient(), clientDao);
+        _driver = new ClientDriver(restClient, clientDao);
     }
     
     [Given(@"a client exists")]

@@ -8,9 +8,9 @@ public class ClientDriver
     private readonly RestClient _restClient;
     private readonly IClientDao _clientDao;
 
-    public ClientDriver(HttpClient httpClient, IClientDao clientDao)
+    public ClientDriver(RestClient restClient, IClientDao clientDao)
     {
-        _restClient = new RestClient(httpClient);
+        _restClient = restClient;
         _clientDao = clientDao;
     }
     

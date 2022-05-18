@@ -17,11 +17,11 @@ public class AccountStepDefinitions
     private readonly ScenarioContext _scenarioContext;
     private readonly AccountDriver _accountDriver;
 
-    public AccountStepDefinitions(ScenarioContext scenarioContext, MyInvestApplicationFactory applicationFactory, IServiceScope scenarioScope)
+    public AccountStepDefinitions(ScenarioContext scenarioContext, RestClient restClient, IServiceScope scenarioScope)
     {
         _scenarioContext = scenarioContext;
         var accountDao = scenarioScope.ServiceProvider.GetRequiredService<IInvestmentAccountDao>();
-        _accountDriver = new AccountDriver(applicationFactory.CreateClient(), accountDao);
+        _accountDriver = new AccountDriver(restClient, accountDao);
     }
     
     [Given(@"they have an? ([A-Z]*) account with status ([a-zA-Z]*)")]

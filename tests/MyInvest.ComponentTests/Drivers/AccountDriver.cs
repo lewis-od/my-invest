@@ -8,9 +8,9 @@ public class AccountDriver
     private readonly RestClient _restClient;
     private readonly IInvestmentAccountDao _accountDao;
 
-    public AccountDriver(HttpClient httpClient, IInvestmentAccountDao accountDao)
+    public AccountDriver(RestClient restClient, IInvestmentAccountDao accountDao)
     {
-        _restClient = new RestClient(httpClient);
+        _restClient = restClient;
         _accountDao = accountDao;
     }
 

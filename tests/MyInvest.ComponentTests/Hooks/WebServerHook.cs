@@ -18,7 +18,9 @@ public class WebServerHook
     {
         var application = new MyInvestApplicationFactory().WithWebHostBuilder(_ => { });
         _objectContainer.RegisterInstanceAs(application);
-        // TODO: Create single HttpClient or RestClient instance and register with DI container
+
+        var restClient = new RestClient(application.CreateClient());
+        _objectContainer.RegisterInstanceAs(restClient);
 
         var scenarioScope = application.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
         _objectContainer.RegisterInstanceAs(scenarioScope);
