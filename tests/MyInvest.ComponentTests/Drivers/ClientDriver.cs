@@ -18,7 +18,13 @@ public class ClientDriver
     {
         var createClientRequest = new SignUpRequestDto
         {
-            Username = username
+            Username = username,
+            Address = new PostalAddressDto
+            {
+                Line1 = "Line 1",
+                Line2 = "Line 2",
+                Postcode = "M15 4AB",
+            }
         };
         var result = await _restClient.PostObjectAsync<SignUpRequestDto, ClientDto>("/clients/sign-up", createClientRequest);
         return result;

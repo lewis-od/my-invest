@@ -12,6 +12,8 @@ namespace MyInvest.UnitTests.Persistence.Clients;
 
 public class ClientRepositoryTests
 {
+    private static readonly PostalAddress Address = new("some", "dummy", "address");
+
     private readonly Mock<IClientDao> _clientDao = new();
     private readonly Mock<IClientEntityMapper> _clientMapper = new();
     private readonly Mock<IAccountRepository> _accountRepository = new();
@@ -26,7 +28,7 @@ public class ClientRepositoryTests
     [Test]
     public void CreatesNewClient()
     {
-        var client = new Client(ClientId.From(Guid.NewGuid()), "lewis", Enumerable.Empty<InvestmentAccount>());
+        var client = new Client(ClientId.From(Guid.NewGuid()), "lewis", Address, Enumerable.Empty<InvestmentAccount>());
         var entity = new ClientEntity();
         _clientMapper.Setup(mapper => mapper.MapToEntity(client)).Returns(entity);
         
@@ -45,7 +47,7 @@ public class ClientRepositoryTests
         var accounts = new[] {TestAccountFactory.NewAccount(clientId, AccountType.GIA)};
         _accountRepository.Setup(repo => repo.FindByClientId(ClientId.From(clientId))).Returns(accounts);
         
-        var retrievedClient = new Client(ClientId.From(clientId), "lewis", accounts);
+        var retrievedClient = new Client(ClientId.From(clientId), "lewis", Address, accounts);
         _clientMapper.Setup(mapper => mapper.MapFromEntity(clientEntity, accounts)).Returns(retrievedClient);
 
         var client = _clientRepository.GetById(ClientId.From(clientId));

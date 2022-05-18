@@ -56,7 +56,7 @@ public class AccountOpeningServiceTests
 
     private void GivenClientExists()
     {
-        var client = new Client(_clientId, "username", Enumerable.Empty<InvestmentAccount>());
+        var client = new Client(_clientId, "username", new PostalAddress("some", "dummy", "address"), Enumerable.Empty<InvestmentAccount>());
         _clientRepository.Setup(repo => repo.GetById(_clientId)).Returns(client);
     }
 

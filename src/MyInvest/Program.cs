@@ -37,7 +37,7 @@ builder.Services.AddSwaggerGen();
 var mapperConfig = AutoMapperConfigFactory.Create();
 builder.Services.AddSingleton(mapperConfig.CreateMapper());
 
-builder.Services.AddSingleton<AccountMapper>();
+builder.Services.AddSingleton<AccountDtoMapper>();
 builder.Services.AddSingleton<IUniqueIdGenerator<AccountId>, AccountIdGenerator>();
 builder.Services.AddSingleton<AccountFactory>();
 builder.Services.AddSingleton<IInvestmentAccountEntityMapper, InvestmentAccountEntityMapper>();

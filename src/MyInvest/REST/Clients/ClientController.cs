@@ -22,7 +22,8 @@ public class ClientController : ControllerBase
     [Route("sign-up")]
     public ActionResult<ClientDto> SignUp([FromBody] SignUpRequestDto signUpRequest)
     {
-        var newClient = _clientService.SignUp(signUpRequest.Username);
+        var address = _clientDtoMapper.MapToDomain(signUpRequest.Address);
+        var newClient = _clientService.SignUp(signUpRequest.Username, address);
         return _clientDtoMapper.MapToDto(newClient);
     }
 

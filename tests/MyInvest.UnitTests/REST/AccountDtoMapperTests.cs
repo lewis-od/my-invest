@@ -8,14 +8,14 @@ using NUnit.Framework;
 
 namespace MyInvest.UnitTests.REST;
 
-public class AccountMapperTests
+public class AccountDtoMapperTests
 {
-    private readonly AccountMapper _mapper;
+    private readonly AccountDtoMapper _dtoMapper;
 
-    public AccountMapperTests()
+    public AccountDtoMapperTests()
     {
         var mapperConfig = new MapperConfiguration(cfg => cfg.AddProfile<RestMapperProfile>());
-        _mapper = new AccountMapper(mapperConfig.CreateMapper());
+        _dtoMapper = new AccountDtoMapper(mapperConfig.CreateMapper());
     }
 
     [Test]
@@ -26,7 +26,7 @@ public class AccountMapperTests
         var balance = 12.34m;
         var investmentAccount = new InvestmentAccount(AccountId.From(accountId), clientId, AccountType.GIA, AccountStatus.Open, balance);
 
-        var actualDto = _mapper.MapToDto(investmentAccount);
+        var actualDto = _dtoMapper.MapToDto(investmentAccount);
 
         var expectedDto = new AccountDto
             {AccountId = accountId, AccountType = AccountTypeDto.GIA, Status = AccountStatusDto.Open, Balance = balance, Savings = null};
@@ -44,7 +44,7 @@ public class AccountMapperTests
         var savingsAccount = new SavingsAccount(AccountId.From(accountId), clientId, AccountType.ISA, AccountStatus.Open, balance, savingsAllowance,
             savingsContributions);
 
-        var actualDto = _mapper.MapToDto(savingsAccount);
+        var actualDto = _dtoMapper.MapToDto(savingsAccount);
 
         var expectedDto = new AccountDto
         {

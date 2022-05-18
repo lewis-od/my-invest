@@ -24,4 +24,22 @@ public class PostalAddress
     }
 
     public PostalAddress Verified() => new(Line1, Line2, Postcode, true);
+
+    protected bool Equals(PostalAddress other)
+    {
+        return Line1 == other.Line1 && Line2 == other.Line2 && Postcode == other.Postcode && IsVerified == other.IsVerified;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+        return Equals((PostalAddress) obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Line1, Line2, Postcode, IsVerified);
+    }
 }

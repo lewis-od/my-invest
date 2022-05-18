@@ -13,6 +13,8 @@ namespace MyInvest.UnitTests.Persistence.Clients;
 
 public class ClientEntityMapperTests
 {
+    private static readonly PostalAddress Address = new("line1", "line2", "postcode");
+    
     private readonly ClientEntityMapper _mapper;
 
     public ClientEntityMapperTests()
@@ -22,16 +24,46 @@ public class ClientEntityMapperTests
     }
 
     [Test]
-    public void MapsEntityToDomain()
+    public void MapsEntityWithUnverifiedAddressToDomain()
     {
         var clientId = Guid.NewGuid();
         const string username = "lewis";
-        var entity = new ClientEntity {ClientId = clientId, Username = username};
+        var entity = new ClientEntity
+        {
+            ClientId = clientId,
+            Username = username,
+            AddressLine1 = "line1",
+            AddressLine2 = "line2",
+            AddressPostcode = "postcode",
+            AddressIsVerified = false,
+        };
         var accounts = new[] { TestAccountFactory.NewAccount(clientId, AccountType.GIA) };
 
         var client = _mapper.MapFromEntity(entity, accounts);
 
-        var expectedClient = new Client(ClientId.From(clientId), username, accounts);
+        var expectedClient = new Client(ClientId.From(clientId), username, Address, accounts);
+        client.Should().BeEquivalentTo(expectedClient);
+    }
+    
+    [Test]
+    public void MapsEntityWithVerifiedAddressToDomain()
+    {
+        var clientId = Guid.NewGuid();
+        const string username = "lewis";
+        var entity = new ClientEntity
+        {
+            ClientId = clientId,
+            Username = username,
+            AddressLine1 = "line1",
+            AddressLine2 = "line2",
+            AddressPostcode = "postcode",
+            AddressIsVerified = true,
+        };
+        var accounts = new[] { TestAccountFactory.NewAccount(clientId, AccountType.GIA) };
+
+        var client = _mapper.MapFromEntity(entity, accounts);
+
+        var expectedClient = new Client(ClientId.From(clientId), username, Address.Verified(), accounts);
         client.Should().BeEquivalentTo(expectedClient);
     }
 
@@ -40,11 +72,19 @@ public class ClientEntityMapperTests
     {
         var clientId = Guid.NewGuid();
         const string username = "lewis";
-        var client = new Client(ClientId.From(clientId), username, Enumerable.Empty<InvestmentAccount>());
+        var client = new Client(ClientId.From(clientId), username, Address, Enumerable.Empty<InvestmentAccount>());
 
         var entity = _mapper.MapToEntity(client);
 
-        var expectedEntity = new ClientEntity {ClientId = clientId, Username = username};
+        var expectedEntity = new ClientEntity
+        {
+            ClientId = clientId,
+            Username = username,
+            AddressLine1 = "line1",
+            AddressLine2 = "line2",
+            AddressPostcode = "postcode",
+            AddressIsVerified = false,
+        };
         entity.Should().BeEquivalentTo(expectedEntity);
     }
 }

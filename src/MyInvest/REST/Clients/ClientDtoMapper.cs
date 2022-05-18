@@ -13,4 +13,6 @@ public class ClientDtoMapper
     }
 
     public ClientDto MapToDto(Client client) => _mapper.Map<ClientDto>(client);
+
+    public PostalAddress MapToDomain(PostalAddressDto dto) => new(dto.Line1, dto.Line2, dto.Postcode);
 }

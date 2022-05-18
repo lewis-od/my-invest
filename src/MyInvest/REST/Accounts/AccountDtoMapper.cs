@@ -3,11 +3,11 @@ using MyInvest.Domain.Accounts;
 
 namespace MyInvest.REST.Accounts;
 
-public class AccountMapper
+public class AccountDtoMapper
 {
     private readonly IMapper _mapper;
 
-    public AccountMapper(IMapper mapper)
+    public AccountDtoMapper(IMapper mapper)
     {
         _mapper = mapper;
     }

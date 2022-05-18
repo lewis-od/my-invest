@@ -15,4 +15,20 @@ public class ClientEntity
     [Required]
     [Column("username")]
     public string Username { get; set; } = null!;
+
+    [Required]
+    [Column("address_line_1")]
+    public string AddressLine1 { get; set; } = null!;
+
+    [Required]
+    [Column("address_line_2")]
+    public string AddressLine2 { get; set; } = null!;
+
+    [Required]
+    [Column("address_postcode")]
+    public string AddressPostcode { get; set; } = null!;
+
+    [Required]
+    [Column("address_is_verified")]
+    public bool AddressIsVerified { get; set; } = false;
 }

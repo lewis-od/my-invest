@@ -16,7 +16,7 @@ public class ClientService
         _logger = logger;
     }
 
-    public Client SignUp(string username)
+    public Client SignUp(string username, PostalAddress postalAddress)
     {
         if (_clientRepository.IsUsernameTaken(username))
         {
@@ -24,7 +24,7 @@ public class ClientService
         }
         
         var clientId = _clientIdGenerator.Generate();
-        var newClient = new Client(clientId, username, Enumerable.Empty<InvestmentAccount>());
+        var newClient = new Client(clientId, username, postalAddress, Enumerable.Empty<InvestmentAccount>());
         _logger.LogInformation("Creating new client with ID {ClientId}", clientId);
         _clientRepository.Create(newClient);
         return newClient;

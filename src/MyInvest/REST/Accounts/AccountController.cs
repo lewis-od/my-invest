@@ -10,19 +10,19 @@ public class AccountController : ControllerBase
 {
     private readonly IAccountRepository _accountRepository;
     private readonly AccountOpeningService _accountOpeningService;
-    private readonly AccountMapper _accountMapper;
+    private readonly AccountDtoMapper _accountDtoMapper;
 
-    public AccountController(IAccountRepository accountRepository, AccountOpeningService accountOpeningService, AccountMapper accountMapper)
+    public AccountController(IAccountRepository accountRepository, AccountOpeningService accountOpeningService, AccountDtoMapper accountDtoMapper)
     {
         _accountRepository = accountRepository;
         _accountOpeningService = accountOpeningService;
-        _accountMapper = accountMapper;
+        _accountDtoMapper = accountDtoMapper;
     }
 
     [HttpGet]
     [Route("")]
     public ActionResult<IEnumerable<AccountDto>> Index() =>
-        Ok(_accountRepository.GetAll().Select(account => _accountMapper.MapToDto(account)));
+        Ok(_accountRepository.GetAll().Select(account => _accountDtoMapper.MapToDto(account)));
 
     [HttpPost]
     [Route("open/gia")]
@@ -35,6 +35,6 @@ public class AccountController : ControllerBase
     private AccountDto OpenAccountOfType(AccountType accountType, ClientId clientId)
     {
         var account = _accountOpeningService.OpenAccount(clientId, accountType);
-        return _accountMapper.MapToDto(account);
+        return _accountDtoMapper.MapToDto(account);
     }
 }
