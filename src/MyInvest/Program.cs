@@ -50,7 +50,7 @@ builder.Services.AddSingleton<IClientEntityMapper, ClientEntityMapper>();
 builder.Services.AddSingleton<IUniqueIdGenerator<ClientId>, ClientIdGenerator>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IClientDao, ClientDao>();
-builder.Services.AddScoped<ClientService>();
+builder.Services.AddScoped<OnboardingService>();
 
 var app = builder.Build();
 

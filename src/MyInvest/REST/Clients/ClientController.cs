@@ -7,13 +7,13 @@ namespace MyInvest.REST.Clients;
 [Route("clients")]
 public class ClientController : ControllerBase
 {
-    private readonly ClientService _clientService;
+    private readonly OnboardingService _onboardingService;
     private readonly IClientRepository _clientRepository;
     private readonly ClientDtoMapper _clientDtoMapper;
 
-    public ClientController(ClientService clientService, IClientRepository clientRepository, ClientDtoMapper clientDtoMapper)
+    public ClientController(OnboardingService onboardingService, IClientRepository clientRepository, ClientDtoMapper clientDtoMapper)
     {
-        _clientService = clientService;
+        _onboardingService = onboardingService;
         _clientRepository = clientRepository;
         _clientDtoMapper = clientDtoMapper;
     }
@@ -23,7 +23,7 @@ public class ClientController : ControllerBase
     public ActionResult<ClientDto> SignUp([FromBody] SignUpRequestDto signUpRequest)
     {
         var address = _clientDtoMapper.MapToDomain(signUpRequest.Address);
-        var newClient = _clientService.SignUp(signUpRequest.Username, address);
+        var newClient = _onboardingService.SignUp(signUpRequest.Username, address);
         return _clientDtoMapper.MapToDto(newClient);
     }
 

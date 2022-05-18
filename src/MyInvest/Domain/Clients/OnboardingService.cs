@@ -3,13 +3,13 @@ using MyInvest.Domain.Ids;
 
 namespace MyInvest.Domain.Clients;
 
-public class ClientService
+public class OnboardingService
 {
     private readonly IClientRepository _clientRepository;
     private readonly IUniqueIdGenerator<ClientId> _clientIdGenerator;
-    private readonly ILogger<ClientService> _logger;
+    private readonly ILogger<OnboardingService> _logger;
 
-    public ClientService(IClientRepository clientRepository, IUniqueIdGenerator<ClientId> clientIdGenerator, ILogger<ClientService> logger)
+    public OnboardingService(IClientRepository clientRepository, IUniqueIdGenerator<ClientId> clientIdGenerator, ILogger<OnboardingService> logger)
     {
         _clientRepository = clientRepository;
         _clientIdGenerator = clientIdGenerator;

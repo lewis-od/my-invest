@@ -10,20 +10,20 @@ using NUnit.Framework;
 
 namespace MyInvest.UnitTests.Domain.Clients;
 
-public class ClientServiceTests
+public class OnboardingServiceTests
 {
     private static readonly ClientId ClientId = ClientId.From(Guid.NewGuid());
     private static readonly PostalAddress Address = new("line1", "line2", "postcode");
 
     private readonly Mock<IClientRepository> _clientRepository;
 
-    private readonly ClientService _clientService;
+    private readonly OnboardingService _onboardingService;
 
-    public ClientServiceTests()
+    public OnboardingServiceTests()
     {
         _clientRepository = new Mock<IClientRepository>();
         var clientIdGenerator = new FixedIdGenerator<ClientId>(ClientId);
-        _clientService = new ClientService(_clientRepository.Object, clientIdGenerator, Mock.Of<ILogger<ClientService>>());
+        _onboardingService = new OnboardingService(_clientRepository.Object, clientIdGenerator, Mock.Of<ILogger<OnboardingService>>());
     }
 
     [Test]
@@ -32,7 +32,7 @@ public class ClientServiceTests
         const string username = "lewis";
         _clientRepository.Setup(repo => repo.IsUsernameTaken(username)).Returns(false);
 
-        var newClient = _clientService.SignUp(username, Address);
+        var newClient = _onboardingService.SignUp(username, Address);
 
         var expectedClient = new Client(ClientId, username, Address, Enumerable.Empty<InvestmentAccount>());
         newClient.Should().BeEquivalentTo(expectedClient);
@@ -45,6 +45,6 @@ public class ClientServiceTests
         const string username = "lewis";
         _clientRepository.Setup(repo => repo.IsUsernameTaken(username)).Returns(true);
 
-        Assert.Throws<UsernameTakenException>(() => _clientService.SignUp(username, Address));
+        Assert.Throws<UsernameTakenException>(() => _onboardingService.SignUp(username, Address));
     }
 }
