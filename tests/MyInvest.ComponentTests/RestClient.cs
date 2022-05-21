@@ -32,6 +32,12 @@ public class RestClient : IDisposable
         var result = await _httpClient.PostAsync(endpoint, payloadJson);
         return await DeserializeJsonAsync<TResponse>(await result.Content.ReadAsStreamAsync());
     }
+    
+    public async Task PatchObjectAsync<TPayload>(string endpoint, TPayload payload)
+    {
+        var payloadJson = new StringContent(JsonSerializer.Serialize(payload), Encoding.Default, MediaTypeNames.Application.Json);
+        await _httpClient.PatchAsync(endpoint, payloadJson);
+    }
 
     private static async Task<T?> DeserializeJsonAsync<T>(Stream response) =>
         await JsonSerializer.DeserializeAsync<T>(response, JsonDeserializerOptions);

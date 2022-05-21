@@ -30,6 +30,18 @@ public class AccountDriver
         return result?.AccountId;
     }
 
+    public async Task AddCashToAccountAsync(Guid accountId, decimal amount)
+    {
+        var addCashRequest = new AddCashRequestDto
+        {
+            TransactionId = Guid.NewGuid(),
+            MAC = "mac",
+            Amount = amount
+        };
+        var endpoint = $"/accounts/{accountId}/add-cash";
+        await _restClient.PatchObjectAsync(endpoint, addCashRequest);
+    }
+
     public Guid CreateAccountForClient(Guid clientId, string accountType, string status)
     {
         var entity = new InvestmentAccountEntity

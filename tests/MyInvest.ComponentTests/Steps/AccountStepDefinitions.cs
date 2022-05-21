@@ -39,6 +39,13 @@ public class AccountStepDefinitions
         var clientId = _scenarioContext.Get<Guid>(ClientId);
         _scenarioContext[AccountId] = await _accountDriver.CreateAccountAsync(clientId, accountType);
     }
+    
+    [When(@"they add £(.*) cash to their account")]
+    public async Task WhenTheyAddCashToTheirAccount(decimal amount)
+    {
+        var accountId = _scenarioContext.Get<Guid>(AccountId);
+        await _accountDriver.AddCashToAccountAsync(accountId, amount);
+    }
 
     [Then(@"an account with type ([A-Z]*) is created")]
     public async Task ThenAnAccountWithTypeXIsCreated(string accountType)
