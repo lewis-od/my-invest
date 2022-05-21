@@ -1,3 +1,4 @@
+using MyInvest.Domain.Accounts;
 using MyInvest.Persistence;
 using MyInvest.Persistence.Accounts;
 using MyInvest.REST.Accounts;
@@ -45,10 +46,9 @@ public class AccountDriver
         return entity.AccountId;
     }
 
-    public async Task<AccountDto?> FetchAccountAsync(Guid clientId, Guid accountId)
+    public async Task<AccountDto?> FetchAccountAsync(Guid accountId)
     {
-        var endpoint = $"/clients/{clientId}";
-        var result = await _restClient.GetObjectAsync<ClientDto>(endpoint);
-        return result?.InvestmentAccounts.First(account => account.AccountId == accountId);
+        var endpoint = $"/accounts/{accountId}";
+        return await _restClient.GetObjectAsync<AccountDto>(endpoint);
     }
 }

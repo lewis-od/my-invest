@@ -20,9 +20,17 @@ public class AccountController : ControllerBase
     }
 
     [HttpGet]
-    [Route("")]
-    public ActionResult<IEnumerable<AccountDto>> Index() =>
-        Ok(_accountRepository.GetAll().Select(account => _accountDtoMapper.MapToDto(account)));
+    [Route("{accountId:guid}")]
+    public ActionResult<AccountDto> GetAccount(Guid accountId)
+    {
+        var account = _accountRepository.GetById(AccountId.From(accountId));
+        if (account == null)
+        {
+            return new NotFoundResult();
+        }
+
+        return _accountDtoMapper.MapToDto(account);
+    }
 
     [HttpPost]
     [Route("open/gia")]

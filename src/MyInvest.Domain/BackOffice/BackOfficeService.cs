@@ -3,7 +3,12 @@ using MyInvest.Domain.Clients;
 
 namespace MyInvest.Domain.BackOffice;
 
-public class BackOfficeService
+public interface IBackOfficeService
+{
+    void VerifyAddress(ClientId clientId);
+}
+
+public class BackOfficeService : IBackOfficeService
 {
     private readonly IClientRepository _clientRepository;
     private readonly IAccountRepository _accountRepository;

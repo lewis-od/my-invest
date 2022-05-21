@@ -73,9 +73,8 @@ public class AccountStepDefinitions
 
     private async Task<AccountDto> FetchAccountAsync()
     {
-        var clientId = _scenarioContext.Get<Guid>(ClientId);
         var accountId = _scenarioContext.Get<Guid>(AccountId);
-        var account = await _accountDriver.FetchAccountAsync(clientId, accountId);
+        var account = await _accountDriver.FetchAccountAsync(accountId);
         Assert.NotNull(account);
         return account!;
     }

@@ -6,7 +6,7 @@ using MyInvest.REST;
 using MyInvest.REST.Accounts;
 using NUnit.Framework;
 
-namespace MyInvest.UnitTests.REST;
+namespace MyInvest.UnitTests.REST.Accounts;
 
 public class AccountDtoMapperTests
 {

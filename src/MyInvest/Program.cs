@@ -52,7 +52,7 @@ builder.Services.AddSingleton<IUniqueIdGenerator<ClientId>, ClientIdGenerator>()
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IClientDao, ClientDao>();
 builder.Services.AddScoped<OnboardingService>();
-builder.Services.AddScoped<BackOfficeService>();
+builder.Services.AddScoped<IBackOfficeService, BackOfficeService>();
 
 var app = builder.Build();
 
