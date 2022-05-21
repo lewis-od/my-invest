@@ -1,0 +1,28 @@
+# Builds an init container to run database migrations before app startup
+FROM mcr.microsoft.com/dotnet/sdk:6.0  AS build
+WORKDIR /src
+
+RUN dotnet tool install --global dotnet-ef
+ENV PATH="${PATH}:/root/.dotnet/tools"
+
+COPY ["src/MyInvest.Persistence/packages.lock.json", "MyInvest.Persistence/"]
+COPY ["src/MyInvest.Persistence/MyInvest.Persistence.csproj", "MyInvest.Persistence/"]
+COPY ["src/MyInvest.Domain/packages.lock.json", "MyInvest.Domain/"]
+COPY ["src/MyInvest.Domain/MyInvest.Domain.csproj", "MyInvest.Domain/"]
+RUN dotnet restore "MyInvest.Persistence/MyInvest.Persistence.csproj" --locked-mode
+
+COPY ["src/MyInvest/appsettings.json", "MyInvest/"]
+COPY src/MyInvest.Domain/ MyInvest.Domain/
+COPY src/MyInvest.Persistence/ MyInvest.Persistence/
+WORKDIR "/src/MyInvest.Persistence"
+RUN mkdir -p /app
+RUN dotnet build "MyInvest.Persistence.csproj" --no-restore --configuration Release
+
+RUN dotnet ef migrations bundle --self-contained --target-runtime linux-x64 --output /app/migrations
+
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 as final
+WORKDIR /app
+
+COPY --from=build ["/src/MyInvest/appsettings.json", "/app/appsettings.json"]
+COPY --from=build ["/app/migrations", "/app/migrations"]
+ENTRYPOINT ["/app/migrations"]

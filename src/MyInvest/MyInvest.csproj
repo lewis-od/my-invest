@@ -35,5 +35,10 @@
       <ProjectReference Include="..\MyInvest.Domain\MyInvest.Domain.csproj" />
       <ProjectReference Include="..\MyInvest.Persistence\MyInvest.Persistence.csproj" />
     </ItemGroup>
+    
+    <ItemGroup>
+      <None Remove=".dockerignore" />
+      <None Remove="Dockerfile" />
+    </ItemGroup>
 
 </Project>

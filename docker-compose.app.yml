@@ -7,10 +7,9 @@ services:
       POSTGRES_PASSWORD: 'topsecret'
     volumes:
       - app-volume:/var/lib/postgresql/data
-        
+  
   migrations:
     build:
-      context: 'src/MyInvest'
       dockerfile: 'Dockerfile.migrations'
     image: myinvest-migrations:latest
     init: true
@@ -22,7 +21,7 @@ services:
   
   myinvest:
     build:
-      context: 'src/MyInvest'
+      dockerfile: 'Dockerfile'
     image: 'myinvest:latest'
     environment:
       ConnectionStrings__Postgres: 'Host=app_postgres;Port=5432;Database=myinvest;Username=myinvest;Password=topsecret'
