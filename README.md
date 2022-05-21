@@ -19,7 +19,7 @@ dotnet tool install --global dotnet-ef
 
 ### Running the server
 1. Start the database: `docker compose up`
-2. Run the migrations: `dotnet ef database update --project src/MyInvest`
+2. Run the migrations: `dotnet ef database update --project src/MyInvest.Persistence`
 3. Start the server `dotnet run --project src/MyInvest`
 4. Visit https://localhost:7147/swagger/index.html
 
@@ -42,10 +42,10 @@ dotnet test tests/MyInvest.ComponentTests
 ### Creating database migrations
 To create a migration, edit the relevant entity files, then run:
 ```
-dotnet ef migrations add MigrationName --project src/MyInvest
+dotnet ef migrations add MigrationName --project src/MyInvest.Persistence --output-dir Migrations
 ```
 
 After checking the generated migration, you can apply it with:
 ```
-dotnet ef database update --project src/MyInvest
+dotnet ef database update --project src/MyInvest.Persistence
 ```
