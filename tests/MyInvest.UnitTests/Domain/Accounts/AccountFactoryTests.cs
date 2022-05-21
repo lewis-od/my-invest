@@ -54,7 +54,7 @@ public class AccountFactoryTests
     [TestCaseSource(nameof(SavingsAccountTypes))]
     public void CreatesNewSavingsAccountsWithCorrectAllowances(AccountType accountType, decimal expectedAllowance)
     {
-        var createdAccount = _accountFactory.NewAccount(_clientId, accountType);
+        var createdAccount = _accountFactory.NewAccount(_clientId, accountType, false);
         
         var expectedAccount = new SavingsAccount(_accountId, _clientId, accountType, AccountStatus.PreOpen, 0.00m, expectedAllowance);
         createdAccount.Should().BeEquivalentTo(expectedAccount);
@@ -65,9 +65,17 @@ public class AccountFactoryTests
     [TestCase(AccountType.SIPP)]
     public void CreatesNewOtherAccountTypes(AccountType accountType)
     {
-        var createdAccount = _accountFactory.NewAccount(_clientId, accountType);
+        var createdAccount = _accountFactory.NewAccount(_clientId, accountType, false);
 
         var expectedAccount = new InvestmentAccount(_accountId,  _clientId, accountType, AccountStatus.PreOpen, 0.00m);
         createdAccount.Should().BeEquivalentTo(expectedAccount);
+    }
+
+    [Test]
+    public void CreatesAccountInOpenStatusWhenAddressIsVerified([Values] AccountType accountType)
+    {
+        var createdAccount = _accountFactory.NewAccount(_clientId, accountType, true);
+
+        createdAccount.AccountStatus.Should().Be(AccountStatus.Open);
     }
 }

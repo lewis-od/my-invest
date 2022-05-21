@@ -33,14 +33,27 @@ public class AccountOpeningServiceTests
     }
 
     [Test]
-    public void CreatesNewInvestmentAccountForClient()
+    public void CreatesNewInvestmentAccountForClientWithUnverifiedAddress()
     {
-        GivenClientExists();
+        GivenClientExistsWithUnverifiedAddress();
         GivenClientHasSipp();
 
         var openedAccount = _openingService.OpenAccount(_clientId, AccountType.GIA);
 
         var expectedAccount = new InvestmentAccount(_accountId, _clientId, AccountType.GIA, AccountStatus.PreOpen, 0.0m);
+        openedAccount.Should().BeEquivalentTo(expectedAccount);
+        _accountRepository.Verify(repo => repo.Create(It.Is<InvestmentAccount>(account => Equals(account.AccountId, expectedAccount.AccountId))));
+    }
+    
+    [Test]
+    public void CreatesNewInvestmentAccountForClientWithVerifiedAddress()
+    {
+        GivenClientExistsWithVerifiedAddress();
+        GivenClientHasSipp();
+
+        var openedAccount = _openingService.OpenAccount(_clientId, AccountType.GIA);
+
+        var expectedAccount = new InvestmentAccount(_accountId, _clientId, AccountType.GIA, AccountStatus.Open, 0.0m);
         openedAccount.Should().BeEquivalentTo(expectedAccount);
         _accountRepository.Verify(repo => repo.Create(It.Is<InvestmentAccount>(account => Equals(account.AccountId, expectedAccount.AccountId))));
     }
@@ -54,9 +67,19 @@ public class AccountOpeningServiceTests
         Assert.Throws<ClientAlreadyOwnsAccountException>(() => _openingService.OpenAccount(_clientId, AccountType.SIPP));
     }
 
-    private void GivenClientExists()
+    private void GivenClientExistsWithUnverifiedAddress() => GivenClientExists(false);
+    
+    private void GivenClientExistsWithVerifiedAddress() => GivenClientExists(true);
+
+    private void GivenClientExists(bool addressIsVerified = false)
     {
-        var client = new Client(_clientId, "username", new PostalAddress("some", "dummy", "address"), Enumerable.Empty<InvestmentAccount>());
+        var postalAddress = new PostalAddress("some", "dummy", "address");
+        if (addressIsVerified)
+        {
+            postalAddress = postalAddress.Verified();
+        }
+
+        var client = new Client(_clientId, "username", postalAddress, Enumerable.Empty<InvestmentAccount>());
         _clientRepository.Setup(repo => repo.GetById(_clientId)).Returns(client);
     }
 

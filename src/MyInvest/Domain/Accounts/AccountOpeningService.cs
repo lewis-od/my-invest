@@ -24,32 +24,38 @@ public class AccountOpeningService
 
     public InvestmentAccount OpenAccount(ClientId clientId, AccountType accountType)
     {
-        VerifyClientCanOpenAccount(clientId, accountType);
-        return CreateAccount(clientId, accountType);
+        var client = FetchClientOrThrow(clientId);
+        VerifyClientCanOpenAccount(client, accountType);
+        return CreateAccount(client, accountType);
     }
-
-    private void VerifyClientCanOpenAccount(ClientId clientId, AccountType accountType)
+    
+    private Client FetchClientOrThrow(ClientId clientId)
     {
-        if (!ClientExists(clientId))
+        var client = _clientRepository.GetById(clientId);
+        if (client == null)
         {
-            throw new ClientDoesNotExistException("Client " + clientId.Value + " not found");
+            throw new ClientDoesNotExistException($"Client {clientId.Value} not found");
         }
 
+        return client;
+    }
+
+    private void VerifyClientCanOpenAccount(Client client, AccountType accountType)
+    {
+        var clientId = client.ClientId;
         if (ClientOwnsAccountOfType(clientId, accountType))
         {
-            throw new ClientAlreadyOwnsAccountException("Client " + clientId.Value + " already has an account of type " + accountType);
+            throw new ClientAlreadyOwnsAccountException($"Client {clientId.Value} already has an account of type {accountType}");
         }
     }
-
-    private bool ClientExists(ClientId clientId) => _clientRepository.GetById(clientId) != null;
 
     private bool ClientOwnsAccountOfType(ClientId clientId, AccountType accountType) =>
         _accountRepository.FindByClientId(clientId).Any(account => account.AccountType == accountType);
 
-    private InvestmentAccount CreateAccount(ClientId clientId, AccountType accountType)
+    private InvestmentAccount CreateAccount(Client client, AccountType accountType)
     {
-        _logger.LogInformation("Opening account of type {AccountType} for client {ClientId}", accountType, clientId);
-        var newAccount = _accountFactory.NewAccount(clientId, accountType);
+        _logger.LogInformation("Opening account of type {AccountType} for client {ClientId}", accountType, client.ClientId);
+        var newAccount = _accountFactory.NewAccount(client.ClientId, accountType, client.Address.IsVerified);
         _accountRepository.Create(newAccount);
         return newAccount;
     }

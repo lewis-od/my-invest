@@ -10,8 +10,6 @@ public class AccountFactory
 
     private readonly IUniqueIdGenerator<AccountId> _idGenerator;
 
-    public static AccountFactory NewFactory() => new (new AccountIdGenerator());
-
     public AccountFactory(IUniqueIdGenerator<AccountId> idGenerator)
     {
         _idGenerator = idGenerator;
@@ -25,10 +23,10 @@ public class AccountFactory
             _ => CreateInvestmentAccount(accountId, clientId, type, accountStatus, balance),
         };
     
-    public InvestmentAccount NewAccount(Guid clientId, AccountType type)
+    public InvestmentAccount NewAccount(Guid clientId, AccountType type, bool addressIsVerified)
     {
         var newAccountId = _idGenerator.Generate();
-        var accountStatus = AccountStatus.PreOpen;
+        var accountStatus = addressIsVerified ? AccountStatus.Open : AccountStatus.PreOpen;
         return type switch
         {
             AccountType.ISA => CreateIsa(newAccountId, clientId, accountStatus, InitialBalance),
