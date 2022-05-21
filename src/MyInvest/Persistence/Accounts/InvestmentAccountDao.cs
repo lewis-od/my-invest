@@ -3,6 +3,7 @@ namespace MyInvest.Persistence.Accounts;
 public interface IInvestmentAccountDao
 {
     void CreateAccount(InvestmentAccountEntity account);
+    void UpdateAccount(InvestmentAccountEntity newAccountEntity);
     InvestmentAccountEntity? GetById(Guid accountId);
     IEnumerable<InvestmentAccountEntity> GetAll();
     IEnumerable<InvestmentAccountEntity> FindByClientId(Guid clientId);
@@ -20,6 +21,12 @@ public class InvestmentAccountDao : IInvestmentAccountDao
     public void CreateAccount(InvestmentAccountEntity account)
     {
         _dbContext.InvestmentAccounts.Add(account);
+        _dbContext.SaveChanges();
+    }
+
+    public void UpdateAccount(InvestmentAccountEntity account)
+    {
+        _dbContext.InvestmentAccounts.Update(account);
         _dbContext.SaveChanges();
     }
 

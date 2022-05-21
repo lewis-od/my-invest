@@ -78,4 +78,16 @@ public class InvestmentAccountRepositoryTests
         
         _accountDao.Verify(dao => dao.CreateAccount(newAccountEntity));
     }
+    
+    [Test]
+    public void UpdatesExistingAccount()
+    {
+        var account = TestAccountFactory.NewAccount();
+        var accountEntity = new InvestmentAccountEntity();
+        _accountMapper.Setup(mapper => mapper.MapToEntity(account)).Returns(accountEntity);
+        
+        _accountRepository.Update(account);
+        
+        _accountDao.Verify(dao => dao.UpdateAccount(accountEntity));
+    }
 }

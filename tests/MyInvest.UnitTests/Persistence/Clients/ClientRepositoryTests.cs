@@ -38,6 +38,18 @@ public class ClientRepositoryTests
     }
 
     [Test]
+    public void UpdatesExistingClient()
+    {
+        var client = new Client(ClientId.From(Guid.NewGuid()), "lewis", Address, Enumerable.Empty<InvestmentAccount>());
+        var entity = new ClientEntity();
+        _clientMapper.Setup(mapper => mapper.MapToEntity(client)).Returns(entity);
+        
+        _clientRepository.Update(client);
+
+        _clientDao.Verify(dao => dao.UpdateClient(entity));
+    }
+
+    [Test]
     public void ReturnsClientById()
     {
         var clientId = Guid.NewGuid();

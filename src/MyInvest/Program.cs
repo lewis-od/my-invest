@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using MyInvest;
 using MyInvest.Domain.Accounts;
+using MyInvest.Domain.BackOffice;
 using MyInvest.Domain.Clients;
 using MyInvest.Domain.Ids;
 using MyInvest.Persistence;
@@ -51,6 +52,7 @@ builder.Services.AddSingleton<IUniqueIdGenerator<ClientId>, ClientIdGenerator>()
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IClientDao, ClientDao>();
 builder.Services.AddScoped<OnboardingService>();
+builder.Services.AddScoped<BackOfficeService>();
 
 var app = builder.Build();
 

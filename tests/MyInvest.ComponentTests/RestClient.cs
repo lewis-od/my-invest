@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace MyInvest.ComponentTests;
 
-public class RestClient
+public class RestClient : IDisposable
 {
     private static readonly JsonSerializerOptions JsonDeserializerOptions = new()
     {
@@ -39,5 +39,10 @@ public class RestClient
     public async Task PutAsync(string endpoint)
     {
         await _httpClient.PutAsync(endpoint, null);
+    }
+
+    public void Dispose()
+    {
+        _httpClient.Dispose();
     }
 }

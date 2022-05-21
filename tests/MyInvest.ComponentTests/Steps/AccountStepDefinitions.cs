@@ -1,9 +1,11 @@
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using MyInvest.ComponentTests.Drivers;
+using MyInvest.Persistence;
 using MyInvest.Persistence.Accounts;
 using MyInvest.REST.Accounts;
 using MyInvest.REST.Clients;
+using NUnit.Framework;
 using static MyInvest.ComponentTests.Steps.ClientStepDefinitions;
 
 namespace MyInvest.ComponentTests.Steps;
@@ -21,7 +23,8 @@ public class AccountStepDefinitions
     {
         _scenarioContext = scenarioContext;
         var accountDao = scenarioScope.ServiceProvider.GetRequiredService<IInvestmentAccountDao>();
-        _accountDriver = new AccountDriver(restClient, accountDao);
+        var dbContext = scenarioScope.ServiceProvider.GetRequiredService<MyInvestDbContext>();
+        _accountDriver = new AccountDriver(restClient, accountDao, dbContext);
     }
     
     [Given(@"they have an? ([A-Z]*) account with status ([a-zA-Z]*)")]
@@ -55,10 +58,13 @@ public class AccountStepDefinitions
     }
     
     [Then(@"the account has status ([a-zA-Z]*)")]
-    public void ThenTheAccountHasStatusX(string accountStatus)
+    public async Task ThenTheAccountHasStatusX(string accountStatus)
     {
-        var createdAccount = _scenarioContext.Get<AccountDto>(Account);
-        var createdAccountStatus = createdAccount.Status;
+        var clientId = _scenarioContext.Get<Guid>(ClientId);
+        var accountId = _scenarioContext.Get<Guid>(AccountId);
+        var createdAccount = await _accountDriver.FetchAccountAsync(clientId, accountId);
+        var createdAccountStatus = createdAccount?.Status;
+        Assert.NotNull(createdAccountStatus);
         Enum.GetName(typeof(AccountStatusDto), createdAccountStatus).Should().BeEquivalentTo(accountStatus);
     }
 

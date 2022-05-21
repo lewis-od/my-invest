@@ -4,9 +4,9 @@ public class BackOfficeDriver
 {
     private readonly RestClient _client;
 
-    public BackOfficeDriver(HttpClient httpClient)
+    public BackOfficeDriver(RestClient client)
     {
-        _client = new RestClient(httpClient);
+        _client = client;
     }
 
     public async Task VerifyAddressAsync(Guid clientId)

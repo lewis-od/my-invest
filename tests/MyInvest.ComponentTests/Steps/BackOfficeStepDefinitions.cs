@@ -9,10 +9,10 @@ public class BackOfficeStepDefinitions
     private readonly ScenarioContext _scenarioContext;
     private readonly BackOfficeDriver _driver;
 
-    public BackOfficeStepDefinitions(ScenarioContext scenarioContext, MyInvestApplicationFactory application)
+    public BackOfficeStepDefinitions(ScenarioContext scenarioContext, RestClient restClient)
     {
         _scenarioContext = scenarioContext;
-        _driver = new BackOfficeDriver(application.CreateClient());
+        _driver = new BackOfficeDriver(restClient);
     }
     
     [When(@"I verify their address")]

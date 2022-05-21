@@ -5,7 +5,7 @@ public class InvestmentAccount
     public AccountId AccountId { get; }
     public Guid ClientId { get; }
     public AccountType AccountType { get; }
-    public AccountStatus AccountStatus { get;  }
+    public AccountStatus AccountStatus { get; private set; }
     public decimal Balance { get; private set; }
 
     public InvestmentAccount(
@@ -25,5 +25,10 @@ public class InvestmentAccount
     public virtual void CreditBalance(decimal amount)
     {
         Balance += amount;
+    }
+
+    public void OpenAccount()
+    {
+        AccountStatus = AccountStatus.Open;
     }
 }

@@ -18,6 +18,8 @@ public class ClientRepository : IClientRepository
 
     public void Create(Client client) => _clientDao.CreateClient(_entityMapper.MapToEntity(client));
 
+    public void Update(Client client) => _clientDao.UpdateClient(_entityMapper.MapToEntity(client));
+
     public Client? GetById(ClientId clientId)
     {
         var entity = _clientDao.GetById(clientId.Value);

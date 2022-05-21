@@ -1,7 +1,7 @@
 Feature: Back office
 	Operations performed by the back office team
 
-Scenario: Add two numbers
+Scenario: Verify address for client with pre-open account
 	Given a client exists
 	And they have a GIA account with status PreOpen
 	When I verify their address

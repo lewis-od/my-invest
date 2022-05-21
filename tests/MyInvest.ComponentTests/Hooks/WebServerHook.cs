@@ -22,7 +22,7 @@ public class WebServerHook
         var restClient = new RestClient(application.CreateClient());
         _objectContainer.RegisterInstanceAs(restClient);
 
-        var scenarioScope = application.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
+         var scenarioScope = application.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
         _objectContainer.RegisterInstanceAs(scenarioScope);
     }
 }

@@ -13,13 +13,19 @@ public class MyInvestApplicationFactory : WebApplicationFactory<Program>
     // TODO: Read from file
     private const string ConnectionString = "Host=localhost;Port=5433;Database=myinvest-tests;Username=myinvest-tests;Password=testingdb";
 
+    private static readonly object Lock = new();
+    private static bool _dbHasBeenInitialised = false;
+    
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureServices(services =>
         {
             RemoveDbContextIfExists(services);
             RegisterTestDbContext(services);
-            SetupDbForTests(services);
+            lock (Lock)
+            {
+                SetupDbForTests(services);
+            }
         });
     }
 
@@ -42,11 +48,14 @@ public class MyInvestApplicationFactory : WebApplicationFactory<Program>
 
     private static void SetupDbForTests(IServiceCollection services)
     {
+        if (_dbHasBeenInitialised) return;
+        
         var sp = services.BuildServiceProvider();
         using var scope = sp.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<MyInvestDbContext>();
         dbContext.Database.EnsureDeleted();
         dbContext.Database.EnsureCreated();
+        _dbHasBeenInitialised = true;
     }
 
     protected override void ConfigureClient(HttpClient client)

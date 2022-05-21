@@ -31,4 +31,10 @@ public class InvestmentAccountRepository : IAccountRepository
         var accountEntity = _accountMapper.MapToEntity(newAccount);
         _dao.CreateAccount(accountEntity);
     }
+
+    public void Update(InvestmentAccount account)
+    {
+        var entity = _accountMapper.MapToEntity(account);
+        _dao.UpdateAccount(entity);
+    }
 }

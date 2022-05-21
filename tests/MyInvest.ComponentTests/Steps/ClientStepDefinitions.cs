@@ -2,6 +2,7 @@
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using MyInvest.ComponentTests.Drivers;
+using MyInvest.Persistence;
 using MyInvest.Persistence.Clients;
 using MyInvest.REST.Clients;
 
@@ -22,7 +23,8 @@ public sealed class ClientStepDefinitions
     {
         _scenarioContext = scenarioContext;
         var clientDao = scenarioScope.ServiceProvider.GetRequiredService<IClientDao>();
-        _driver = new ClientDriver(restClient, clientDao);
+        var dbContext = scenarioScope.ServiceProvider.GetRequiredService<MyInvestDbContext>();
+        _driver = new ClientDriver(restClient, clientDao, dbContext);
     }
     
     [Given(@"a client exists")]

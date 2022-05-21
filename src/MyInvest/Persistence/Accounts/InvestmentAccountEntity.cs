@@ -28,4 +28,26 @@ public class InvestmentAccountEntity
     [Required]
     [Column("balance")]
     public decimal Balance { get; set; }
+
+    protected bool Equals(InvestmentAccountEntity other)
+    {
+        return AccountId.Equals(other.AccountId) &&
+               ClientId.Equals(other.ClientId) &&
+               AccountType == other.AccountType &&
+               AccountStatus == other.AccountStatus &&
+               Balance == other.Balance;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+        return Equals((InvestmentAccountEntity) obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(AccountId, ClientId, AccountType, AccountStatus, Balance);
+    }
 }

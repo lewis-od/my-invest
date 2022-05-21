@@ -8,4 +8,5 @@ public interface IAccountRepository
     InvestmentAccount? GetById(AccountId accountId);
     IEnumerable<InvestmentAccount> FindByClientId(ClientId clientId);
     void Create(InvestmentAccount newAccount);
+    void Update(InvestmentAccount account);
 }

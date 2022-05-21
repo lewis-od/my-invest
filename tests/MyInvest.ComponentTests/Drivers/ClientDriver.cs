@@ -1,3 +1,4 @@
+using MyInvest.Persistence;
 using MyInvest.Persistence.Clients;
 using MyInvest.REST.Clients;
 
@@ -7,11 +8,13 @@ public class ClientDriver
 {
     private readonly RestClient _restClient;
     private readonly IClientDao _clientDao;
+    private readonly MyInvestDbContext _dbContext;
 
-    public ClientDriver(RestClient restClient, IClientDao clientDao)
+    public ClientDriver(RestClient restClient, IClientDao clientDao, MyInvestDbContext dbContext)
     {
         _restClient = restClient;
         _clientDao = clientDao;
+        _dbContext = dbContext;
     }
     
     public async Task<ClientDto?> SignUpAsync(string username)
@@ -36,9 +39,14 @@ public class ClientDriver
         {
             ClientId = Guid.NewGuid(),
             Username = username,
-
+            AddressLine1 = "line1",
+            AddressLine2 = "line2",
+            AddressPostcode = "postcode",
+            AddressIsVerified = false,
         };
+        _dbContext.Database.BeginTransaction();
         _clientDao.CreateClient(entity);
+        _dbContext.Database.CommitTransaction();
         return entity.ClientId;
     }
 }
