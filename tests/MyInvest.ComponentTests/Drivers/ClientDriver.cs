@@ -1,6 +1,7 @@
 using MyInvest.Persistence;
 using MyInvest.Persistence.Clients;
 using MyInvest.REST.Clients;
+using NUnit.Framework;
 
 namespace MyInvest.ComponentTests.Drivers;
 
@@ -48,6 +49,16 @@ public class ClientDriver
         _clientDao.CreateClient(entity);
         _dbContext.Database.CommitTransaction();
         return entity.ClientId;
+    }
+
+    public void MarkAddressAsVerified(Guid clientId)
+    {
+        var client = _clientDao.GetById(clientId);
+        Assert.NotNull(client);
+        client!.AddressIsVerified = true;
+        _dbContext.Database.BeginTransaction();
+        _clientDao.UpdateClient(client);
+        _dbContext.Database.CommitTransaction();
     }
 
     public async Task<ClientDto?> FetchClientAsync(Guid clientId)

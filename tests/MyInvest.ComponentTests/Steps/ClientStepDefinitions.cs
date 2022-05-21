@@ -44,6 +44,13 @@ public sealed class ClientStepDefinitions
         _scenarioContext[Username] = username;
     }
 
+    [Given("their address is verified")]
+    public void GivenTheirAddressIsVerified()
+    {
+        var clientId = _scenarioContext.Get<Guid>(ClientId);
+        _driver.MarkAddressAsVerified(clientId);
+    }
+
     [When("they sign up for a profile")]
     public async Task WhenTheySignUpForAProfile()
     {
