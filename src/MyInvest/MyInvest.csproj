@@ -8,6 +8,7 @@
         <PreserveCompilationContext>true</PreserveCompilationContext>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
         <RuntimeIdentifiers>osx-x64;linux-x64;win-x64</RuntimeIdentifiers>
+        <RootNamespace>MyInvest</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -36,6 +37,10 @@
     
     <ItemGroup>
         <InternalsVisibleTo Include="MyInvest.ComponentTests" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\MyInvest.Domain\MyInvest.Domain.csproj" />
     </ItemGroup>
 
 </Project>

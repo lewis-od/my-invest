@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using MyInvest.Domain.Accounts;
 using MyInvest.Domain.Ids;
 

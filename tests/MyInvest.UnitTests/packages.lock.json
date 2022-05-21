@@ -224,8 +224,8 @@
       },
       "Microsoft.Extensions.Logging.Abstractions": {
         "type": "Transitive",
-        "resolved": "6.0.0",
-        "contentHash": "/HggWBbTwy8TgebGSX5DBZ24ndhzi93sHUBDvP1IxbZD7FDokYzdAr6+vbWGjw2XAfR2EJ1sfKUotpjHnFWPxA=="
+        "resolved": "6.0.1",
+        "contentHash": "dzB2Cgg+JmrouhjkcQGzSFjjvpwlq353i8oBQO2GWNjCXSzhbtBRUf28HSauWe7eib3wYOdb3tItdjRwAdwCSg=="
       },
       "Microsoft.Extensions.Options": {
         "type": "Transitive",
@@ -1025,12 +1025,19 @@
         "dependencies": {
           "AutoMapper": "11.0.0",
           "Microsoft.EntityFrameworkCore": "6.0.1",
+          "MyInvest.Domain": "1.0.0",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "6.0.3",
           "Serilog": "2.10.0",
           "Serilog.AspNetCore": "4.1.0",
           "Serilog.Settings.Configuration": "3.3.0",
           "Serilog.Sinks.Console": "4.0.1",
           "Swashbuckle.AspNetCore": "6.2.3"
+        }
+      },
+      "myinvest.domain": {
+        "type": "Project",
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "6.0.1"
         }
       }
     },
