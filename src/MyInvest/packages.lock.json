@@ -494,6 +494,15 @@
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "6.0.1"
         }
+      },
+      "myinvest.persistence": {
+        "type": "Project",
+        "dependencies": {
+          "AutoMapper": "11.0.0",
+          "Microsoft.EntityFrameworkCore": "6.0.1",
+          "MyInvest.Domain": "1.0.0",
+          "Npgsql.EntityFrameworkCore.PostgreSQL": "6.0.3"
+        }
       }
     },
     "net6.0/linux-x64": {

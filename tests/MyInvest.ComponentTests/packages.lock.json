@@ -1565,6 +1565,7 @@
           "AutoMapper": "11.0.0",
           "Microsoft.EntityFrameworkCore": "6.0.1",
           "MyInvest.Domain": "1.0.0",
+          "MyInvest.Persistence": "1.0.0",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "6.0.3",
           "Serilog": "2.10.0",
           "Serilog.AspNetCore": "4.1.0",
@@ -1577,6 +1578,15 @@
         "type": "Project",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "6.0.1"
+        }
+      },
+      "myinvest.persistence": {
+        "type": "Project",
+        "dependencies": {
+          "AutoMapper": "11.0.0",
+          "Microsoft.EntityFrameworkCore": "6.0.1",
+          "MyInvest.Domain": "1.0.0",
+          "Npgsql.EntityFrameworkCore.PostgreSQL": "6.0.3"
         }
       }
     },

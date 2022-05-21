@@ -18,6 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\src\MyInvest.Persistence\MyInvest.Persistence.csproj" />
       <ProjectReference Include="..\..\src\MyInvest\MyInvest.csproj" />
     </ItemGroup>
 

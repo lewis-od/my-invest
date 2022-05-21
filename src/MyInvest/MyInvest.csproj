@@ -41,6 +41,7 @@
     
     <ItemGroup>
       <ProjectReference Include="..\MyInvest.Domain\MyInvest.Domain.csproj" />
+      <ProjectReference Include="..\MyInvest.Persistence\MyInvest.Persistence.csproj" />
     </ItemGroup>
 
 </Project>
