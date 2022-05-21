@@ -27,9 +27,9 @@ public class BackOfficeController : ControllerBase
         }
         catch (ClientDoesNotExistException)
         {
-            return new NotFoundResult();
+            return NotFound();
         }
 
-        return new NoContentResult();
+        return NoContent();
     }
 }
