@@ -17,11 +17,15 @@ COPY ["src/MyInvest.Domain/MyInvest.Domain.csproj", "MyInvest.Domain/"]
 COPY ["src/MyInvest.Persistence/packages.lock.json", "MyInvest.Persistence/"]
 COPY ["src/MyInvest.Persistence/MyInvest.Persistence.csproj", "MyInvest.Persistence/"]
 
+COPY ["src/MyInvest.Ports/packages.lock.json", "MyInvest.Ports/"]
+COPY ["src/MyInvest.Ports/MyInvest.Ports.csproj", "MyInvest.Ports/"]
+
 RUN dotnet restore "MyInvest/MyInvest.csproj" --locked-mode
 
 COPY src/MyInvest MyInvest/
 COPY src/MyInvest.Domain MyInvest.Domain/
 COPY src/MyInvest.Persistence MyInvest.Persistence/
+COPY src/MyInvest.Ports MyInvest.Ports/
 WORKDIR "/src/MyInvest"
 RUN dotnet build "MyInvest.csproj" --no-restore --configuration Release --output /app/build
 
