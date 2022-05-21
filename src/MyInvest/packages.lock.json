@@ -479,6 +479,12 @@
           "MyInvest.Domain": "1.0.0",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "6.0.3"
         }
+      },
+      "myinvest.ports": {
+        "type": "Project",
+        "dependencies": {
+          "MyInvest.Domain": "1.0.0"
+        }
       }
     },
     "net6.0/linux-x64": {

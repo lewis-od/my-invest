@@ -6,9 +6,11 @@ using MyInvest.Domain.Accounts;
 using MyInvest.Domain.BackOffice;
 using MyInvest.Domain.Clients;
 using MyInvest.Domain.Ids;
+using MyInvest.Domain.Transactions;
 using MyInvest.Persistence;
 using MyInvest.Persistence.Accounts;
 using MyInvest.Persistence.Clients;
+using MyInvest.Ports.Transactions;
 using MyInvest.REST;
 using MyInvest.REST.Accounts;
 using MyInvest.REST.Clients;
@@ -53,6 +55,7 @@ builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IClientDao, ClientDao>();
 builder.Services.AddScoped<OnboardingService>();
 builder.Services.AddScoped<IBackOfficeService, BackOfficeService>();
+builder.Services.AddScoped<ITransactionVerifier, NoOpTransactionVerifier>();
 
 var app = builder.Build();
 
