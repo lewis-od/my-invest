@@ -17,7 +17,7 @@ public class ClientDriver
         _dbContext = dbContext;
     }
     
-    public async Task<ClientDto?> SignUpAsync(string username)
+    public async Task<Guid?> SignUpAsync(string username)
     {
         var createClientRequest = new SignUpRequestDto
         {
@@ -30,7 +30,7 @@ public class ClientDriver
             }
         };
         var result = await _restClient.PostObjectAsync<SignUpRequestDto, ClientDto>("/clients/sign-up", createClientRequest);
-        return result;
+        return result?.ClientId;
     }
 
     public Guid CreateClient(string username)
@@ -48,5 +48,11 @@ public class ClientDriver
         _clientDao.CreateClient(entity);
         _dbContext.Database.CommitTransaction();
         return entity.ClientId;
+    }
+
+    public async Task<ClientDto?> FetchClientAsync(Guid clientId)
+    {
+        var endpoint = $"/clients/{clientId}";
+        return await _restClient.GetObjectAsync<ClientDto>(endpoint);
     }
 }

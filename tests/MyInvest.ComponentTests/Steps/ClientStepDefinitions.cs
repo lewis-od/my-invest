@@ -5,6 +5,7 @@ using MyInvest.ComponentTests.Drivers;
 using MyInvest.Persistence;
 using MyInvest.Persistence.Clients;
 using MyInvest.REST.Clients;
+using NUnit.Framework;
 
 namespace MyInvest.ComponentTests.Steps;
 
@@ -13,8 +14,7 @@ public sealed class ClientStepDefinitions
 {
     public const string Username = "username";
     public const string ClientId = "clientId";
-    public const string Client = "client";
-    
+
     private readonly ScenarioContext _scenarioContext;
     private readonly ClientDriver _driver;
     private readonly Faker _faker = new();
@@ -26,7 +26,7 @@ public sealed class ClientStepDefinitions
         var dbContext = scenarioScope.ServiceProvider.GetRequiredService<MyInvestDbContext>();
         _driver = new ClientDriver(restClient, clientDao, dbContext);
     }
-    
+
     [Given(@"a client exists")]
     public void GivenAClientExists()
     {
@@ -35,13 +35,13 @@ public sealed class ClientStepDefinitions
         var clientId = _driver.CreateClient(username);
         _scenarioContext[ClientId] = clientId;
     }
-    
+
     [Given(@"I have a MyInvest profile")]
     public async Task GivenIHaveAMyInvestProfile()
     {
         var username = RandomUsername();
         _scenarioContext[Username] = username;
-        _scenarioContext[Client] = await _driver.SignUpAsync(username);
+        _scenarioContext[ClientId] = await _driver.SignUpAsync(username);
     }
 
     private string RandomUsername() => $"{_faker.Hacker.Adjective()}-{_faker.Hacker.Noun()}";
@@ -55,18 +55,29 @@ public sealed class ClientStepDefinitions
     [When("I sign up")]
     public async Task WhenISignUp()
     {
-        _scenarioContext[Client] = await _driver.SignUpAsync(_scenarioContext.Get<string>("username"));
+        var username = _scenarioContext.Get<string>(Username);
+        _scenarioContext[ClientId] = await _driver.SignUpAsync(username);
     }
-    
+
     [Then(@"I get assigned a user ID")]
-    public void ThenIGetAssignedAUserId()
+    public async Task ThenIGetAssignedAUserId()
     {
-        _scenarioContext.Get<ClientDto>(Client).ClientId.Should().NotBe(Guid.Empty);
+        var client = await FetchClientAsync();
+        client.ClientId.Should().NotBe(Guid.Empty);
     }
 
     [Then("I have (\\d*) investment accounts")]
-    public void ThenIHaveDInvestmentAccounts(int numAccounts)
+    public async Task ThenIHaveDInvestmentAccounts(int numAccounts)
     {
-        _scenarioContext.Get<ClientDto>(Client).InvestmentAccounts.Should().HaveCount(numAccounts);
+        var client = await FetchClientAsync();
+        client.InvestmentAccounts.Should().HaveCount(numAccounts);
+    }
+
+    private async Task<ClientDto> FetchClientAsync()
+    {
+        var clientId = _scenarioContext.Get<Guid>(ClientId);
+        var client = await _driver.FetchClientAsync(clientId);
+        Assert.NotNull(client);
+        return client!;
     }
 }

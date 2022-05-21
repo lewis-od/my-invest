@@ -18,7 +18,7 @@ public class AccountDriver
         _dbContext = dbContext;
     }
 
-    public async Task<AccountDto?> CreateAccountAsync(Guid clientId, string accountType)
+    public async Task<Guid?> CreateAccountAsync(Guid clientId, string accountType)
     {
         var openAccountRequest = new OpenAccountRequestDto
         {
@@ -26,7 +26,7 @@ public class AccountDriver
         };
         var endpoint = $"/accounts/open/{accountType.ToLower()}";
         var result = await _restClient.PostObjectAsync<OpenAccountRequestDto, AccountDto>(endpoint, openAccountRequest);
-        return result;
+        return result?.AccountId;
     }
 
     public Guid CreateAccountForClient(Guid clientId, string accountType, string status)
