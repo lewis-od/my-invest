@@ -52,7 +52,7 @@ public class ClientDaoTests
 
         var retrievedEntity = _dao.GetById(clientId);
         Assert.NotNull(retrievedEntity);
-        retrievedEntity.Username.Should().Be("lewis");
+        retrievedEntity!.Username.Should().Be("lewis");
     }
 
     [Test]

@@ -59,7 +59,7 @@ public class AccountStepDefinitions
     public async Task ThenTheAccountHasStatusX(string accountStatus)
     {
         var createdAccount = await FetchAccountAsync();
-        var createdAccountStatus = createdAccount?.Status;
+        var createdAccountStatus = createdAccount.Status;
         Assert.NotNull(createdAccountStatus);
         Enum.GetName(typeof(AccountStatusDto), createdAccountStatus).Should().BeEquivalentTo(accountStatus);
     }
