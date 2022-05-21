@@ -15,8 +15,8 @@ public class BackOfficeStepDefinitions
         _driver = new BackOfficeDriver(restClient);
     }
     
-    [When(@"I verify their address")]
-    public async Task WhenIVerifyTheirAddress()
+    [When(@"their address is verified by the back office team")]
+    public async Task WhenTheirAddressIsVerifiedByTheBackOfficeTeam()
     {
         var clientId = _scenarioContext.Get<Guid>(ClientId);
         await _driver.VerifyAddressAsync(clientId);

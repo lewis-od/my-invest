@@ -33,8 +33,8 @@ public class AccountStepDefinitions
         _scenarioContext[AccountId] = accountId;
     }
 
-    [When(@"I open a ([A-Z]*) account")]
-    public async Task WhenIOpenAnInvestmentAccount(string accountType)
+    [When(@"they open an? (ISA|JISA|GIA|SIPP) account")]
+    public async Task WhenTheyOpenAnInvestmentAccount(string accountType)
     {
         var clientId = _scenarioContext.Get<Guid>(ClientId);
         _scenarioContext[AccountId] = await _accountDriver.CreateAccountAsync(clientId, accountType);

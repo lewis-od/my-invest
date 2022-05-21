@@ -27,8 +27,8 @@ public sealed class ClientStepDefinitions
         _driver = new ClientDriver(restClient, clientDao, dbContext);
     }
 
-    [Given(@"a client exists")]
-    public void GivenAClientExists()
+    [Given(@"a client has signed up")]
+    public void GivenAClientHasSignedUp()
     {
         var username = RandomUsername();
         _scenarioContext[Username] = username;
@@ -36,38 +36,30 @@ public sealed class ClientStepDefinitions
         _scenarioContext[ClientId] = clientId;
     }
 
-    [Given(@"I have a MyInvest profile")]
-    public async Task GivenIHaveAMyInvestProfile()
-    {
-        var username = RandomUsername();
-        _scenarioContext[Username] = username;
-        _scenarioContext[ClientId] = await _driver.SignUpAsync(username);
-    }
-
     private string RandomUsername() => $"{_faker.Hacker.Adjective()}-{_faker.Hacker.Noun()}";
 
-    [Given("my username is (.*)")]
-    public void GivenMyUsernameIs(string username)
+    [Given("a client has username (.*)")]
+    public void GivenAClientHasUsername(string username)
     {
         _scenarioContext[Username] = username;
     }
 
-    [When("I sign up")]
-    public async Task WhenISignUp()
+    [When("they sign up for a profile")]
+    public async Task WhenTheySignUpForAProfile()
     {
         var username = _scenarioContext.Get<string>(Username);
         _scenarioContext[ClientId] = await _driver.SignUpAsync(username);
     }
 
-    [Then(@"I get assigned a user ID")]
-    public async Task ThenIGetAssignedAUserId()
+    [Then(@"they are assigned a user ID")]
+    public async Task ThenTheyAreAssignedAUserId()
     {
         var client = await FetchClientAsync();
         client.ClientId.Should().NotBe(Guid.Empty);
     }
 
-    [Then("I have (\\d*) investment accounts")]
-    public async Task ThenIHaveDInvestmentAccounts(int numAccounts)
+    [Then("they have (\\d*) investment accounts")]
+    public async Task ThenTheyHaveDInvestmentAccounts(int numAccounts)
     {
         var client = await FetchClientAsync();
         client.InvestmentAccounts.Should().HaveCount(numAccounts);
