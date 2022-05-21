@@ -2,7 +2,12 @@ using MyInvest.Domain.Transactions;
 
 namespace MyInvest.Domain.Accounts;
 
-public class CashService
+public interface ICashService
+{
+    void AddCashToAccount(AccountId accountId, Transaction transaction);
+}
+
+public class CashService : ICashService
 {
     private readonly IAccountRepository _accountRepository;
     private readonly ITransactionVerifier _transactionVerifier;

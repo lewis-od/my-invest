@@ -24,7 +24,7 @@ public class BackOfficeControllerTests
     public void VerifyAddressReturnsNoContentResponseOnSuccess()
     {
         var clientId = ClientId.From(Guid.NewGuid());
-        _backOfficeService.Setup(s => s.VerifyAddress(clientId));
+        _backOfficeService.Setup(s => s.VerifyAddress(clientId)).Verifiable();
 
         var response = _controller.VerifyClientAddress(clientId);
 

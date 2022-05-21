@@ -2,8 +2,8 @@ namespace MyInvest.Domain.Transactions;
 
 public class Transaction
 {
-    public TransactionId TransactionId { get; init; } = null!;
-    public string MessageAuthenticationCode { get; init; } = null!;
+    public TransactionId TransactionId { get; init; } = TransactionId.From(Guid.Empty);
+    public string MessageAuthenticationCode { get; init; } = "";
     public decimal Amount { get; init; }
 
     protected bool Equals(Transaction other)

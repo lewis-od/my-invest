@@ -40,13 +40,13 @@ builder.Services.AddSwaggerGen();
 var mapperConfig = AutoMapperConfigFactory.Create();
 builder.Services.AddSingleton(mapperConfig.CreateMapper());
 
-builder.Services.AddSingleton<AccountDtoMapper>();
+builder.Services.AddSingleton<IDtoMapper<InvestmentAccount, AccountDto>, AccountDtoMapper>();
 builder.Services.AddSingleton<IUniqueIdGenerator<AccountId>, AccountIdGenerator>();
 builder.Services.AddSingleton<AccountFactory>();
 builder.Services.AddSingleton<IInvestmentAccountEntityMapper, InvestmentAccountEntityMapper>();
 builder.Services.AddScoped<IAccountRepository, InvestmentAccountRepository>();
 builder.Services.AddScoped<IInvestmentAccountDao, InvestmentAccountDao>();
-builder.Services.AddScoped<AccountOpeningService>();
+builder.Services.AddScoped<IAccountOpeningService, AccountOpeningService>();
 
 builder.Services.AddSingleton<ClientDtoMapper>();
 builder.Services.AddSingleton<IClientEntityMapper, ClientEntityMapper>();
@@ -56,6 +56,7 @@ builder.Services.AddScoped<IClientDao, ClientDao>();
 builder.Services.AddScoped<OnboardingService>();
 builder.Services.AddScoped<IBackOfficeService, BackOfficeService>();
 builder.Services.AddScoped<ITransactionVerifier, NoOpTransactionVerifier>();
+builder.Services.AddScoped<ICashService, CashService>();
 
 var app = builder.Build();
 

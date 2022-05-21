@@ -26,6 +26,7 @@ public class InvestmentAccountDao : IInvestmentAccountDao
 
     public void UpdateAccount(InvestmentAccountEntity account)
     {
+        _dbContext.ChangeTracker.Clear();
         _dbContext.InvestmentAccounts.Update(account);
         _dbContext.SaveChanges();
     }

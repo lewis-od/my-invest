@@ -3,7 +3,12 @@ using MyInvest.Domain.Clients;
 
 namespace MyInvest.Domain.Accounts;
 
-public class AccountOpeningService
+public interface IAccountOpeningService
+{
+    InvestmentAccount OpenAccount(ClientId clientId, AccountType accountType);
+}
+
+public class AccountOpeningService : IAccountOpeningService
 {
     private readonly AccountFactory _accountFactory;
     private readonly IAccountRepository _accountRepository;

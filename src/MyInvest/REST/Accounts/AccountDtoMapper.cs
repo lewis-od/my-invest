@@ -3,7 +3,7 @@ using MyInvest.Domain.Accounts;
 
 namespace MyInvest.REST.Accounts;
 
-public class AccountDtoMapper
+public class AccountDtoMapper : IDtoMapper<InvestmentAccount, AccountDto>
 {
     private readonly IMapper _mapper;
 
