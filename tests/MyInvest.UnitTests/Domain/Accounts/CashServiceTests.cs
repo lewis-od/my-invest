@@ -57,7 +57,7 @@ public class CashServiceTests
     
     private AccountId GivenAccountWithStatusExists(AccountStatus status)
     {
-        var existingAccount = TestAccountFactory.AccountWithStatus(status);
+        var existingAccount = TestAccountFactory.InvestmentAccountWithStatus(status);
         var accountId = existingAccount.AccountId;
         _accountRepository.Setup(r => r.GetById(accountId))
             .Returns(existingAccount);

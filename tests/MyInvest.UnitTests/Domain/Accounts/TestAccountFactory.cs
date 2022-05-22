@@ -16,7 +16,7 @@ public static class TestAccountFactory
 
     public static InvestmentAccount NewAccount(Guid clientId, AccountType accountType) => AccountFactory.NewAccount(clientId, accountType, false);
 
-    public static InvestmentAccount AccountWithStatus(AccountStatus status) => AccountFactory.CreateAccount(
+    public static InvestmentAccount InvestmentAccountWithStatus(AccountStatus status) => AccountFactory.CreateAccount(
         IdGenerator.Generate(),
         Guid.NewGuid(),
         AccountType.GIA,

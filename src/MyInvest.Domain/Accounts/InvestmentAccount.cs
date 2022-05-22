@@ -24,6 +24,10 @@ public class InvestmentAccount
 
     public virtual void CreditBalance(decimal amount)
     {
+        if (AccountStatus != AccountStatus.Open)
+        {
+            throw new AccountNotOpenException();
+        }
         Balance += amount;
     }
 
