@@ -18,7 +18,7 @@ public class ClientDriver
         _dbContext = dbContext;
     }
     
-    public async Task<Guid> SignUpAsync(string username)
+    public async Task<RestResponse<ClientDto>> SignUpAsync(string username)
     {
         var createClientRequest = new SignUpRequestDto
         {
@@ -30,10 +30,7 @@ public class ClientDriver
                 Postcode = "M15 4AB",
             }
         };
-        var result = await _restClient.PostObjectAsync<SignUpRequestDto, ClientDto>("/clients/sign-up", createClientRequest);
-        Assert.IsTrue(result.HasSuccessStatusCode());
-        Assert.NotNull(result.Body);
-        return result.Body!.ClientId;
+        return await _restClient.PostObjectAsync<SignUpRequestDto, ClientDto>("/clients/sign-up", createClientRequest);
     }
 
     public Guid CreateClient(string username)

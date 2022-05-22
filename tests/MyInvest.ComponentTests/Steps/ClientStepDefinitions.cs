@@ -6,15 +6,13 @@ using MyInvest.Persistence;
 using MyInvest.Persistence.Clients;
 using MyInvest.REST.Clients;
 using NUnit.Framework;
+using static MyInvest.ComponentTests.Steps.ScenarioContextKeys;
 
 namespace MyInvest.ComponentTests.Steps;
 
 [Binding]
 public sealed class ClientStepDefinitions
 {
-    public const string Username = "username";
-    public const string ClientId = "clientId";
-
     private readonly ScenarioContext _scenarioContext;
     private readonly ClientDriver _driver;
     private readonly Faker _faker = new();
@@ -55,7 +53,9 @@ public sealed class ClientStepDefinitions
     public async Task WhenTheySignUpForAProfile()
     {
         var username = _scenarioContext.Get<string>(Username);
-        _scenarioContext[ClientId] = await _driver.SignUpAsync(username);
+        var response = await _driver.SignUpAsync(username);
+        _scenarioContext[StatusCode] = response.StatusCode;
+        _scenarioContext[ClientId] = response.Body?.ClientId;
     }
 
     [Then(@"they are assigned a user ID")]
@@ -76,7 +76,7 @@ public sealed class ClientStepDefinitions
     {
         var clientId = _scenarioContext.Get<Guid>(ClientId);
         var response = await _driver.FetchClientAsync(clientId);
-        Assert.IsTrue(response.HasSuccessStatusCode());
+        Assert.IsTrue(response.StatusCode.IsSuccess());
         Assert.NotNull(response.Body);
         return response.Body!;
     }

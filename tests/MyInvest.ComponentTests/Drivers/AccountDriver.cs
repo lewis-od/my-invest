@@ -20,17 +20,14 @@ public class AccountDriver
         _dbContext = dbContext;
     }
 
-    public async Task<Guid> CreateAccountAsync(Guid clientId, string accountType)
+    public async Task<RestResponse<AccountDto>> CreateAccountAsync(Guid clientId, string accountType)
     {
         var openAccountRequest = new OpenAccountRequestDto
         {
             ClientId = clientId
         };
         var endpoint = $"/accounts/open/{accountType.ToLower()}";
-        var result = await _restClient.PostObjectAsync<OpenAccountRequestDto, AccountDto>(endpoint, openAccountRequest);
-        Assert.IsTrue(result.HasSuccessStatusCode());
-        Assert.NotNull(result.Body);
-        return result.Body!.AccountId;
+        return await _restClient.PostObjectAsync<OpenAccountRequestDto, AccountDto>(endpoint, openAccountRequest);
     }
 
     public async Task<RestResponse> AddCashToAccountAsync(Guid accountId, decimal amount)

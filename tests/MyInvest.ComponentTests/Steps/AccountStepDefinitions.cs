@@ -5,15 +5,13 @@ using MyInvest.Persistence;
 using MyInvest.Persistence.Accounts;
 using MyInvest.REST.Accounts;
 using NUnit.Framework;
-using static MyInvest.ComponentTests.Steps.ClientStepDefinitions;
+using static MyInvest.ComponentTests.Steps.ScenarioContextKeys;
 
 namespace MyInvest.ComponentTests.Steps;
 
 [Binding]
 public class AccountStepDefinitions
 {
-    public const string AccountId = "accountId";
-
     private readonly ScenarioContext _scenarioContext;
     private readonly AccountDriver _accountDriver;
 
@@ -37,7 +35,9 @@ public class AccountStepDefinitions
     public async Task WhenTheyOpenAnInvestmentAccount(string accountType)
     {
         var clientId = _scenarioContext.Get<Guid>(ClientId);
-        _scenarioContext[AccountId] = await _accountDriver.CreateAccountAsync(clientId, accountType);
+        var response = await _accountDriver.CreateAccountAsync(clientId, accountType);
+        _scenarioContext[StatusCode] = response.StatusCode;
+        _scenarioContext[AccountId] = response.Body?.AccountId;
     }
     
     [When(@"they add £(.*) cash to their account")]
@@ -45,7 +45,7 @@ public class AccountStepDefinitions
     {
         var accountId = _scenarioContext.Get<Guid>(AccountId);
         var response = await _accountDriver.AddCashToAccountAsync(accountId, amount);
-        Assert.IsTrue(response.HasSuccessStatusCode());
+        _scenarioContext[StatusCode] = response.StatusCode;
     }
 
     [Then(@"an account with type ([A-Z]*) is created")]
@@ -83,7 +83,7 @@ public class AccountStepDefinitions
     {
         var accountId = _scenarioContext.Get<Guid>(AccountId);
         var response = await _accountDriver.FetchAccountAsync(accountId);
-        Assert.IsTrue(response.HasSuccessStatusCode());
+        Assert.IsTrue(response.StatusCode.IsSuccess());
         Assert.NotNull(response.Body);
         return response.Body!;
     }

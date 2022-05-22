@@ -11,26 +11,26 @@ public class RestResponse<TBody>
     public HttpStatusCode StatusCode { get; }
     public TBody? Body { get; }
 
-    public RestResponse(HttpStatusCode statusCode)
-    {
-        StatusCode = statusCode;
-        Body = default(TBody?);
-    }
-    
     public RestResponse(HttpStatusCode statusCode, TBody? body)
     {
         StatusCode = statusCode;
         Body = body;
     }
-
-    public bool HasSuccessStatusCode() => (int) StatusCode >= 200 && (int) StatusCode < 300;
 }
 
-public class RestResponse : RestResponse<object>
+public class RestResponse
 {
-    public RestResponse(HttpStatusCode statusCode) : base(statusCode, null)
+    public HttpStatusCode StatusCode { get; }
+    
+    public RestResponse(HttpStatusCode statusCode)
     {
+        StatusCode = statusCode;
     }
+}
+
+public static class HttpStatusCodeExtensions
+{
+    public static bool IsSuccess(this HttpStatusCode code) => (int) code >= 200 && (int) code < 300;
 }
 
 public class RestClient : IDisposable

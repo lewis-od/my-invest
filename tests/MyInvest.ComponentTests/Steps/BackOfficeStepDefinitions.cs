@@ -1,6 +1,5 @@
 using MyInvest.ComponentTests.Drivers;
-using NUnit.Framework;
-using static MyInvest.ComponentTests.Steps.ClientStepDefinitions;
+using static MyInvest.ComponentTests.Steps.ScenarioContextKeys;
 
 namespace MyInvest.ComponentTests.Steps;
 
@@ -21,6 +20,6 @@ public class BackOfficeStepDefinitions
     {
         var clientId = _scenarioContext.Get<Guid>(ClientId);
         var response = await _driver.VerifyAddressAsync(clientId);
-        Assert.IsTrue(response.HasSuccessStatusCode());
+        _scenarioContext[StatusCode] = response.StatusCode;
     }
 }
