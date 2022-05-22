@@ -9,7 +9,7 @@ public class ClientDto
     public Guid ClientId { get; set; }
     
     [Required]
-    public string Username { get; set; } = null!;
+    public string Username { get; set; } = string.Empty;
     
     [Required]
     public IEnumerable<AccountDto> InvestmentAccounts { get; set; } = Enumerable.Empty<AccountDto>();

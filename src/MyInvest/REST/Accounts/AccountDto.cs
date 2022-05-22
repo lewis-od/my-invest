@@ -11,6 +11,6 @@ public class AccountDto
     [Required]
     public AccountStatusDto Status { get; set; } = AccountStatusDto.PreOpen;
     [Required]
-    public decimal Balance { get; set; } = 0.0m;
+    public decimal Balance { get; set; }
     public SavingsDto? Savings { get; set; }
 }
