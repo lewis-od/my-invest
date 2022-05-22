@@ -12,5 +12,5 @@ Scenario: Add cash to pre-open account
 	Given a client has signed up
 	And they have a GIA account with status PreOpen
 	When they add £200.00 cash to their account
-	Then they receive a 409 error
+	Then they receive a conflict error code
 	And the account has balance £0.00

@@ -136,7 +136,7 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.When("they add £200.00 cash to their account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 15
- testRunner.Then("they receive a 409 error", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("they receive a conflict error code", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 16
  testRunner.And("the account has balance £0.00", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");

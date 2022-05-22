@@ -22,11 +22,11 @@ public sealed class RestStepDefinitions
         Assert.IsTrue(statusCode.IsSuccess());
     }
     
-    [Then(@"they receive a (\d*) error")]
-    public void ThenTheyReceiveAError(int expectedStatusCode)
+    [Then(@"they receive a conflict error code")]
+    public void ThenTheyReceiveAConflictErrorCode()
     {
-        var actualStatusCode = (int) _scenarioContext.Get<HttpStatusCode>(StatusCode);
-        actualStatusCode.Should().Be(expectedStatusCode);
+        var actualStatusCode = _scenarioContext.Get<HttpStatusCode>(StatusCode);
+        actualStatusCode.Should().Be(HttpStatusCode.Conflict);
     }
 }
 
