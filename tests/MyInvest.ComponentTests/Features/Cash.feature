@@ -8,10 +8,9 @@ Scenario: Add cash to open account
 	When they add £200.00 cash to their account
 	Then the account has balance £200.00
 
-# TODO: Implement this	
-#Scenario: Add cash to pre-open account
-#	Given a client has signed up
-#	And they have a GIA account with status PreOpen
-#	When they add £200.00 cash to their account
-#	Then they receive an error
-#	And the account has balance £0.00
+Scenario: Add cash to pre-open account
+	Given a client has signed up
+	And they have a GIA account with status PreOpen
+	When they add £200.00 cash to their account
+	Then they receive a 409 error
+	And the account has balance £0.00
