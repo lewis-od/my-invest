@@ -49,3 +49,28 @@ After checking the generated migration, you can apply it with:
 ```
 dotnet ef database update --project src/MyInvest.Persistence
 ```
+
+## Test pyramid
+There are 3 different test suites set up in the solution:
+
+### Unit tests
+- Base of the test pyramid
+- Lots of them, and they're quick/inexpensive to run
+- Test individual classes or collections of classes
+- Try to avoid test doubles when testing the domain model where possible
+
+### Integration tests
+- Middle of the test pyramid
+- Slower/more expensive to run as they make a connection to a real database
+- Test integration points with external systems
+- In this case, just test the DAO class <-> database integration
+
+### Component tests
+- Top of the test pyramid
+- Slowest to run ad they require a database, and start the whole web server
+- Set up data in required state using DAO objects, call REST endpoints, then assert on the results
+- Written in Gherkin in a BDD-style
+- Currently use the DTO classes from the REST layer of the app - maybe they shouldn't
+
+**Note**: It's not currently possible to run the integration and component tests at the same time, as they talk to the
+same database. This needs changing!
