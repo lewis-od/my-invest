@@ -9,8 +9,8 @@ public class BackOfficeDriver
         _client = client;
     }
 
-    public async Task VerifyAddressAsync(Guid clientId)
+    public async Task<RestResponse> VerifyAddressAsync(Guid clientId)
     {
-        await _client.PutAsync($"/back-office/clients/{clientId}/address/verify");
+        return await _client.PutAsync($"/back-office/clients/{clientId}/address/verify");
     }
 }

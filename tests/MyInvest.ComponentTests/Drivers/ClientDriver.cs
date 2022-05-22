@@ -18,7 +18,7 @@ public class ClientDriver
         _dbContext = dbContext;
     }
     
-    public async Task<Guid?> SignUpAsync(string username)
+    public async Task<Guid> SignUpAsync(string username)
     {
         var createClientRequest = new SignUpRequestDto
         {
@@ -31,7 +31,9 @@ public class ClientDriver
             }
         };
         var result = await _restClient.PostObjectAsync<SignUpRequestDto, ClientDto>("/clients/sign-up", createClientRequest);
-        return result?.ClientId;
+        Assert.IsTrue(result.HasSuccessStatusCode());
+        Assert.NotNull(result.Body);
+        return result.Body!.ClientId;
     }
 
     public Guid CreateClient(string username)
@@ -61,7 +63,7 @@ public class ClientDriver
         _dbContext.Database.CommitTransaction();
     }
 
-    public async Task<ClientDto?> FetchClientAsync(Guid clientId)
+    public async Task<RestResponse<ClientDto>> FetchClientAsync(Guid clientId)
     {
         var endpoint = $"/clients/{clientId}";
         return await _restClient.GetObjectAsync<ClientDto>(endpoint);

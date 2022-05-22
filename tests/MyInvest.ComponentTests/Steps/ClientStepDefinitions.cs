@@ -75,8 +75,9 @@ public sealed class ClientStepDefinitions
     private async Task<ClientDto> FetchClientAsync()
     {
         var clientId = _scenarioContext.Get<Guid>(ClientId);
-        var client = await _driver.FetchClientAsync(clientId);
-        Assert.NotNull(client);
-        return client!;
+        var response = await _driver.FetchClientAsync(clientId);
+        Assert.IsTrue(response.HasSuccessStatusCode());
+        Assert.NotNull(response.Body);
+        return response.Body!;
     }
 }

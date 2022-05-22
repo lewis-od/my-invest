@@ -1,4 +1,5 @@
 using MyInvest.ComponentTests.Drivers;
+using NUnit.Framework;
 using static MyInvest.ComponentTests.Steps.ClientStepDefinitions;
 
 namespace MyInvest.ComponentTests.Steps;
@@ -19,6 +20,7 @@ public class BackOfficeStepDefinitions
     public async Task WhenTheirAddressIsVerifiedByTheBackOfficeTeam()
     {
         var clientId = _scenarioContext.Get<Guid>(ClientId);
-        await _driver.VerifyAddressAsync(clientId);
+        var response = await _driver.VerifyAddressAsync(clientId);
+        Assert.IsTrue(response.HasSuccessStatusCode());
     }
 }

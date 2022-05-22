@@ -44,7 +44,8 @@ public class AccountStepDefinitions
     public async Task WhenTheyAddCashToTheirAccount(decimal amount)
     {
         var accountId = _scenarioContext.Get<Guid>(AccountId);
-        await _accountDriver.AddCashToAccountAsync(accountId, amount);
+        var response = await _accountDriver.AddCashToAccountAsync(accountId, amount);
+        Assert.IsTrue(response.HasSuccessStatusCode());
     }
 
     [Then(@"an account with type ([A-Z]*) is created")]
@@ -81,8 +82,9 @@ public class AccountStepDefinitions
     private async Task<AccountDto> FetchAccountAsync()
     {
         var accountId = _scenarioContext.Get<Guid>(AccountId);
-        var account = await _accountDriver.FetchAccountAsync(accountId);
-        Assert.NotNull(account);
-        return account!;
+        var response = await _accountDriver.FetchAccountAsync(accountId);
+        Assert.IsTrue(response.HasSuccessStatusCode());
+        Assert.NotNull(response.Body);
+        return response.Body!;
     }
 }

@@ -3,6 +3,7 @@ using MyInvest.Persistence;
 using MyInvest.Persistence.Accounts;
 using MyInvest.REST.Accounts;
 using MyInvest.REST.Clients;
+using NUnit.Framework;
 
 namespace MyInvest.ComponentTests.Drivers;
 
@@ -19,7 +20,7 @@ public class AccountDriver
         _dbContext = dbContext;
     }
 
-    public async Task<Guid?> CreateAccountAsync(Guid clientId, string accountType)
+    public async Task<Guid> CreateAccountAsync(Guid clientId, string accountType)
     {
         var openAccountRequest = new OpenAccountRequestDto
         {
@@ -27,10 +28,12 @@ public class AccountDriver
         };
         var endpoint = $"/accounts/open/{accountType.ToLower()}";
         var result = await _restClient.PostObjectAsync<OpenAccountRequestDto, AccountDto>(endpoint, openAccountRequest);
-        return result?.AccountId;
+        Assert.IsTrue(result.HasSuccessStatusCode());
+        Assert.NotNull(result.Body);
+        return result.Body!.AccountId;
     }
 
-    public async Task AddCashToAccountAsync(Guid accountId, decimal amount)
+    public async Task<RestResponse> AddCashToAccountAsync(Guid accountId, decimal amount)
     {
         var addCashRequest = new AddCashRequestDto
         {
@@ -39,7 +42,7 @@ public class AccountDriver
             Amount = amount
         };
         var endpoint = $"/accounts/{accountId}/add-cash";
-        await _restClient.PatchObjectAsync(endpoint, addCashRequest);
+        return await _restClient.PatchObjectAsync(endpoint, addCashRequest);
     }
 
     public Guid CreateAccountForClient(Guid clientId, string accountType, string status)
@@ -58,7 +61,7 @@ public class AccountDriver
         return entity.AccountId;
     }
 
-    public async Task<AccountDto?> FetchAccountAsync(Guid accountId)
+    public async Task<RestResponse<AccountDto>> FetchAccountAsync(Guid accountId)
     {
         var endpoint = $"/accounts/{accountId}";
         return await _restClient.GetObjectAsync<AccountDto>(endpoint);
