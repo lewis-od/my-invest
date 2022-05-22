@@ -11,10 +11,11 @@ A toy project for:
 ## Getting started
 
 ### Prerequisites
-Ensure you have the `dotnet` CLI installed. You will also need the Entity Framework extension; this can be installed
-with:
+Ensure you have the `dotnet` CLI installed, along with the [.NET 6 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/6.0).
+
+You can install the required dotnet tools by running the following from the root of the repo:
 ```
-dotnet tool install --global dotnet-ef
+dotnet tool restore
 ```
 
 ### Running the server
