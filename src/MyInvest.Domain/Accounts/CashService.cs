@@ -26,6 +26,11 @@ public class CashService : ICashService
             throw new InvalidTransactionException();
         }
 
+        if (account.AccountStatus != AccountStatus.Open)
+        {
+            throw new AccountNotOpenException();
+        }
+
         account.CreditBalance(transaction.Amount);
         _accountRepository.Update(account);
     }

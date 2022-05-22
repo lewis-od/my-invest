@@ -1,5 +1,4 @@
 using System;
-using System.Security.Principal;
 using FluentAssertions;
 using Moq;
 using MyInvest.Domain.Accounts;
@@ -10,6 +9,8 @@ namespace MyInvest.UnitTests.Domain.Accounts;
 
 public class CashServiceTests
 {
+    private const decimal TransactionAmount = 150.0m;
+    
     private readonly Mock<IAccountRepository> _accountRepository = new();
     private readonly Mock<ITransactionVerifier> _transactionVerifier = new();
     
@@ -21,16 +22,10 @@ public class CashServiceTests
     }
         
     [Test]
-    public void AddCashIncreasesAccountBalanceWhenTransactionIsValid()
+    public void AddCashIncreasesAccountBalanceWhenTransactionIsValidAndAccountIsOpen()
     {
-        var transaction = new Transaction
-        {
-            TransactionId = TransactionId.From(Guid.NewGuid()),
-            MessageAuthenticationCode = "foo",
-            Amount = 150.0m,
-        };
-        GivenTransactionIsValid(transaction, true);
-        var accountId = GivenAccountExists();
+        var transaction = GivenTransactionIsValid(true);
+        var accountId = GivenAccountWithStatusExists(AccountStatus.Open);
 
         InvestmentAccount? updatedAccount = null;
         _accountRepository.Setup(r => r.Update(It.IsAny<InvestmentAccount>()))
@@ -39,22 +34,47 @@ public class CashServiceTests
         _cashService.AddCashToAccount(accountId, transaction);
         
         Assert.NotNull(updatedAccount);
-        updatedAccount!.Balance.Should().Be(transaction.Amount);
+        updatedAccount!.Balance.Should().Be(TransactionAmount);
     }
 
     [Test]
     public void AddCashThrowsExceptionWhenTransactionIsInvalid()
     {
+        var transaction = GivenTransactionIsValid(false);
+        var accountId = GivenAccountWithStatusExists(AccountStatus.Open);
+
+        Assert.Throws<InvalidTransactionException>(() => _cashService.AddCashToAccount(accountId, transaction));
+    }
+
+    [Test]
+    public void AddCashThrowsExceptionWhenAccountIsNotOpen([Values(AccountStatus.PreOpen, AccountStatus.Closed)] AccountStatus accountStatus)
+    {
+        var transaction = GivenTransactionIsValid(true);
+        var accountId = GivenAccountWithStatusExists(accountStatus);
+
+        Assert.Throws<AccountNotOpenException>(() => _cashService.AddCashToAccount(accountId, transaction));
+    }
+    
+    private AccountId GivenAccountWithStatusExists(AccountStatus status)
+    {
+        var existingAccount = TestAccountFactory.AccountWithStatus(status);
+        var accountId = existingAccount.AccountId;
+        _accountRepository.Setup(r => r.GetById(accountId))
+            .Returns(existingAccount);
+        return accountId;
+    }
+
+    private Transaction GivenTransactionIsValid(bool isValid)
+    {
         var transaction = new Transaction
         {
             TransactionId = TransactionId.From(Guid.NewGuid()),
             MessageAuthenticationCode = "foo",
-            Amount = 150.0m,
+            Amount = TransactionAmount,
         };
-        GivenTransactionIsValid(transaction, false);
-        var accountId = GivenAccountExists();
-
-        Assert.Throws<InvalidTransactionException>(() => _cashService.AddCashToAccount(accountId, transaction));
+        _transactionVerifier.Setup(v => v.VerifyTransaction(transaction))
+            .Returns(isValid);
+        return transaction;
     }
 
     [Test]
@@ -65,20 +85,5 @@ public class CashServiceTests
             .Returns<InvestmentAccount?>(null);
 
         Assert.Throws<AccountDoesNotExistException>(() => _cashService.AddCashToAccount(accountId, new Transaction()));
-    }
-
-    private AccountId GivenAccountExists()
-    {
-        var existingAccount = TestAccountFactory.NewAccount();
-        var accountId = existingAccount.AccountId;
-        _accountRepository.Setup(r => r.GetById(accountId))
-            .Returns(existingAccount);
-        return accountId;
-    }
-
-    private void GivenTransactionIsValid(Transaction transaction, bool isValid)
-    {
-        _transactionVerifier.Setup(v => v.VerifyTransaction(transaction))
-            .Returns(isValid);
     }
 }
