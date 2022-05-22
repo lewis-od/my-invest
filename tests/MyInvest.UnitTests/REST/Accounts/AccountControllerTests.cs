@@ -74,6 +74,19 @@ public class AccountControllerTests
 
         response.Should().BeOfType<BadRequestResult>();
     }
+    
+    [Test]
+    public void AddCashReturnsConflictWhenAccountIsNotOpen()
+    {
+        var accountId = AccountId.From(Guid.NewGuid());
+        var transaction = NewTransaction();
+        _cashService.Setup(cs => cs.AddCashToAccount(accountId, transaction)).Throws<AccountNotOpenException>();
+
+        var request = AddCashRequest(transaction.TransactionId);
+        var response = _controller.AddCash(accountId, request);
+
+        response.Should().BeOfType<ConflictResult>();
+    }
 
     private static Transaction NewTransaction() =>
         new()

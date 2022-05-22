@@ -61,12 +61,17 @@ public class AccountController : ControllerBase
         }
         catch (AccountDoesNotExistException)
         {
-            _logger.LogInformation("Account {} not found", accountId);
+            _logger.LogError("Account {} not found", accountId);
             return NotFound();
+        }
+        catch (AccountNotOpenException)
+        {
+            _logger.LogError("Can't add cash to account {} as it is not in the open state", accountId);
+            return Conflict();
         }
         catch (InvalidTransactionException)
         {
-            _logger.LogInformation("Transaction invalid [id={}; mac={}; amount={}]", request.TransactionId, request.MAC, request.Amount);
+            _logger.LogError("Transaction invalid [id={}; mac={}; amount={}]", request.TransactionId, request.MAC, request.Amount);
             return BadRequest();
         }
         
