@@ -65,7 +65,7 @@ public sealed class ClientStepDefinitions
         client.ClientId.Should().NotBe(Guid.Empty);
     }
 
-    [Then("they have (\\d*) investment accounts")]
+    [Then("they have (\\d*) investment accounts?")]
     public async Task ThenTheyHaveDInvestmentAccounts(int numAccounts)
     {
         var client = await FetchClientAsync();

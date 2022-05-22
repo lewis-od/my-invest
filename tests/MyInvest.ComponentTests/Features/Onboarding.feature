@@ -8,10 +8,11 @@ Scenario: Sign up
 	And they are assigned a user ID
 	And they have 0 investment accounts
 
-Scenario: Opening an account
+Scenario Outline: Opening an account
 	Given a client has signed up
 	When they open a GIA account
 	Then the request is successful
+	And they have 1 investment account
 	And an account with type GIA is created
 	And the account is assigned an ID
 	And the account has status PreOpen
