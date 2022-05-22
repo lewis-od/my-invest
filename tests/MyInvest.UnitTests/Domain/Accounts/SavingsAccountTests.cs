@@ -6,23 +6,34 @@ namespace MyInvest.UnitTests.Domain.Accounts;
 
 public class SavingsAccountTests
 {
-    private readonly SavingsAccount _account = new(AccountId.From(Guid.NewGuid()), Guid.NewGuid(), AccountType.ISA,AccountStatus.Open, 0.0m, 20_000.00m);
+    [Test]
+    public void CreditBalanceUpdatesContributionAmount()
+    {
+        const decimal amount = 12.34m;
+        var account = TestAccountFactory.SavingsAccountWithStatus(AccountStatus.Open);
+
+        account.CreditBalance(amount);
+        
+        Assert.That(account.SavingsContributions, Is.EqualTo(amount));
+        Assert.That(account.Balance, Is.EqualTo(amount));
+    }
 
     [Test]
-    public void AddCashUpdatesContributionAmount()
+    public void CreditBalanceThrowsExceptionWhenAccountStatusIsNotOpen(
+        [Values(AccountStatus.PreOpen, AccountStatus.Closed)] AccountStatus accountStatus
+    )
     {
-        var amount = 12.34m;
-        
-        _account.CreditBalance(amount);
-        
-        Assert.That(_account.SavingsContributions, Is.EqualTo(amount));
-        Assert.That(_account.Balance, Is.EqualTo(amount));
+        var account = TestAccountFactory.SavingsAccountWithStatus(accountStatus);
+
+        Assert.Throws<AccountNotOpenException>(() => account.CreditBalance(12.34m));
     }
 
     [Test]
     public void AddCashThrowsExceptionIfContributionsExceedAllowance()
     {
-        Assert.Throws<SavingsAllowanceExceededException>(() => _account.CreditBalance(20_000.01m));
+        var account = TestAccountFactory.SavingsAccountWithStatus(AccountStatus.Open);
+        
+        Assert.Throws<SavingsAllowanceExceededException>(() => account.CreditBalance(20_000.01m));
     }
 
     [Test]

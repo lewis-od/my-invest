@@ -23,4 +23,12 @@ public static class TestAccountFactory
         status,
         0.0m
     );
+
+    public static SavingsAccount SavingsAccountWithStatus(AccountStatus status) => (AccountFactory.CreateAccount(
+        IdGenerator.Generate(),
+        Guid.NewGuid(),
+        AccountType.ISA,
+        status,
+        0.0m
+    ) as SavingsAccount)!;
 }
